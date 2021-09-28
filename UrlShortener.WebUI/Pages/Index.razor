@@ -1,0 +1,123 @@
+﻿@page "/"
+@inject IMediator Mediator
+@inject MessageService message
+@inject NavigationManager NavigationManager
+
+<Row Class="search">
+    <Card Class="search__wrapper">
+        <TitleTemplate>
+            <Title Class="title" Level="2">
+                <Icon Class="title__icon">
+                    <Component>
+                        <ScissorSVG/>
+                    </Component>
+                </Icon>
+                URL Shortener
+            </Title>
+        </TitleTemplate>
+
+        <Body>
+        <Form Model="@Model" OnFinish="OnFinish" Loading="@isProcess">
+            <FluentValidationValidator/>
+            <FormItem>
+                <Row>
+                    <AntDesign.Col Xs="24" Md="20">
+                        <AntDesign.Input Placeholder="Paste a Long URL (ex. https://google.com 😅)" AllowClear Size="large"
+                                         @bind-Value="@Model.Link">
+                            <Prefix>
+                                <Icon Type="link" Theme="outline"/>
+                            </Prefix>
+                            <AddOnBefore>
+                                <Icon Type="setting"
+                                      Class="custom_url"
+                                      Height="100%"
+                                      OnClick="() => Model.IsAliasUsed = !Model.IsAliasUsed">
+                                </Icon>
+                            </AddOnBefore>
+                        </AntDesign.Input>
+                    </AntDesign.Col>
+                    <AntDesign.Col Xs="24" Md="4">
+                        <Button Type="@ButtonType.Primary" Size="large" HtmlType="submit">
+                            Shorten
+                        </Button>
+                    </AntDesign.Col>
+                </Row>
+            </FormItem>
+            @if (Model.IsAliasUsed)
+            {
+                <FormItem WrapperColSpan="24">
+                    <AntDesign.Input @bind-Value="@Model.SuggestedAlias"
+                                     Placeholder="alias"
+                                     AllowClear
+                                     AutoFocus>
+                        <Prefix>@NavigationManager.ToAbsoluteUri("s/").ToString()</Prefix>
+                    </AntDesign.Input>
+                </FormItem>
+            }
+        </Form>
+        @if (shortResult != null)
+        {
+            <Paragraph Copyable Underline CopyConfig=@(new TypographyCopyableConfig { OnCopy = async () => await OnCopyClick(shortResult.Alias) })>
+                <a href="@shortResult.Alias" target="_blank">@shortResult.Alias</a>
+            </Paragraph>
+        }
+        </Body>
+    </Card>
+</Row>
+
+
+@code {
+
+    [Inject]
+    protected ILogger<Index> Logger { get; set; }
+
+    [Inject]
+    protected IJSRuntime Js { get; set; }
+
+    [Inject]
+    protected IMapper Mapper { get; set; }
+
+    private CreateLinkResponse shortResult { get; set; }
+    private CreateLink Model { get; } = new();
+    private bool isProcess { get; set; }
+
+    public async Task OnFinish(EditContext editContext)
+    {
+        try
+        {
+            isProcess = true;
+
+            await Task.Delay(1);
+
+            var request = Mapper.Map<CreateLinkRequest>(Model);
+
+            shortResult = await Mediator.Send(request);
+
+            shortResult.Alias = NavigationManager.ToAbsoluteUri($"s/{shortResult.Alias}").ToString();
+        }
+        catch (ValidationException exception)
+        {
+    // Do not need to wait
+#pragma warning disable CS4014
+            message.Error(exception.Errors.ElementAtOrDefault(0).ErrorMessage);
+        }
+        catch (Exception exception)
+        {
+            Logger.LogError(exception.Message);
+    // Do not need to wait
+#pragma warning disable CS4014
+            message.Error("Unexpected error, please try at another time");
+        }
+        finally
+        {
+            isProcess = false;
+        }
+    }
+
+    public async Task OnCopyClick(string str)
+    {
+        await Js.InvokeAsync<object>(JSInteropConstants.Copy, str);
+        message.Info($"{str} copied into clipboard");
+    }
+
+}

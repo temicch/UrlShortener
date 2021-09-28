@@ -1,0 +1,16 @@
+<Router AppAssembly="@typeof(Program).Assembly">
+    <Found Context="routeData">
+        <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)"/>
+    </Found>
+    <NotFound>
+        <LayoutView Layout="@typeof(MainLayout)">
+            <Row class="not_found">
+                <Result Status="404"
+                        Title="404"
+                        SubTitle="Sorry, the page you visited does not exist."/>
+            </Row>
+        </LayoutView>
+    </NotFound>
+</Router>
+
+<AntContainer/>
