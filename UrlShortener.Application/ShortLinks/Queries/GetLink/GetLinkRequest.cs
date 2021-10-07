@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using MediatR;
 using UrlShortener.Application.Interfaces;
 using UrlShortener.Domain.Common;
@@ -15,8 +15,5 @@ namespace UrlShortener.Application.Implementation.ShortLinks.Queries.GetLink
         }
 
         public string Alias { get; set; }
-
-        public Func<ShortLink, DateTime?, DomainEvent<ShortLink>> Event =>
-            (response, time) => new LinkClickEvent(response, time);
     }
 }
