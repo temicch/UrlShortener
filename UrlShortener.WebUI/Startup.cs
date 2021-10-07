@@ -7,6 +7,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using UrlShortener.Application.Implementation;
 using UrlShortener.Infrastructure;
+using UrlShortener.WebUI.Middleware;
 
 namespace UrlShortener.WebUI
 {
@@ -51,8 +52,11 @@ namespace UrlShortener.WebUI
                 app.UseHsts();
             }
 
+            app.UseMiddleware<ApiErrorWrappingMiddleware>();
+
             app.UseHttpsRedirection();
             app.UseWebOptimizer();
+
             app.UseStaticFiles();
 
             app.UseRouting();
