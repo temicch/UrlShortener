@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
+using CSharpFunctionalExtensions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using UrlShortener.Application.Interfaces;
@@ -11,7 +12,7 @@ using UrlShortener.Domain.Entities;
 
 namespace UrlShortener.Application.Implementation.ShortLinks.Commands.CreateLink
 {
-    public class CreateLinkHandler : IRequestHandler<CreateLinkRequest, CreateLinkResponse>
+    public class CreateLinkHandler : IRequestHandler<CreateLinkRequest, IResult<CreateLinkResponse>>
     {
         public const int COUNT_OF_SHORT_LINK_RETRY = 100;
 
@@ -27,7 +28,8 @@ namespace UrlShortener.Application.Implementation.ShortLinks.Commands.CreateLink
             _mapper = mapper;
         }
 
-        public async Task<CreateLinkResponse> Handle(CreateLinkRequest request, CancellationToken cancellationToken)
+        public async Task<IResult<CreateLinkResponse>> Handle(CreateLinkRequest request,
+            CancellationToken cancellationToken)
         {
             string alias;
 
@@ -36,13 +38,16 @@ namespace UrlShortener.Application.Implementation.ShortLinks.Commands.CreateLink
             if (!string.IsNullOrEmpty(request.SuggestedAlias))
             {
                 alias = request.SuggestedAlias;
+                if (await _dbContext.ShortLinks.Where(y => y.Alias == alias).AnyAsync(cancellationToken))
+                    return Result.Failure<CreateLinkResponse>(
+                        "Link with specified alias is exists. Try to specify another one");
             }
             else
             {
                 var sameLink = await GetLinkByUrl(normalizedUrl, cancellationToken);
 
                 if (sameLink != null)
-                    return _mapper.Map<CreateLinkResponse>(sameLink);
+                    return Result.Success(_mapper.Map<CreateLinkResponse>(sameLink));
 
                 alias = await GenerateAlias(normalizedUrl, cancellationToken);
             }
@@ -53,10 +58,11 @@ namespace UrlShortener.Application.Implementation.ShortLinks.Commands.CreateLink
 
             await _dbContext.SaveChangesAsync(cancellationToken);
 
-            return _mapper.Map<CreateLinkResponse>(shortLink);
+            return Result.Success(_mapper.Map<CreateLinkResponse>(shortLink));
         }
 
-        private async Task<string> GenerateAlias(string normalizedUrl, CancellationToken cancellationToken)
+        private async Task<string> GenerateAlias(string normalizedUrl,
+            CancellationToken cancellationToken)
         {
             string salt = null;
 
@@ -73,7 +79,8 @@ namespace UrlShortener.Application.Implementation.ShortLinks.Commands.CreateLink
             throw new Exception("Can't create alias");
         }
 
-        private async Task<ShortLink> GetLinkByUrl(string normalizedUrl, CancellationToken cancellationToken)
+        private async Task<ShortLink> GetLinkByUrl(string normalizedUrl,
+            CancellationToken cancellationToken)
         {
             return await _dbContext.ShortLinks
                 .Where(x => x.Link == normalizedUrl)

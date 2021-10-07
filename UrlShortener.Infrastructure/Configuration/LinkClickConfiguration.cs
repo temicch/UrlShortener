@@ -13,6 +13,11 @@ namespace UrlShortener.Infrastructure.Configuration
             builder.Property(x => x.Id)
                 .HasMaxLength(128)
                 .ValueGeneratedOnAdd();
+
+            builder.HasOne(x => x.Link)
+                .WithMany()
+                .HasForeignKey(x => x.LinkId)
+                .IsRequired();
         }
     }
 }

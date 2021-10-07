@@ -1,7 +1,9 @@
-﻿using System.Threading.Tasks;
+﻿using System.Net;
+using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using UrlShortener.Application.Implementation.LinkClicks.Queries.GetClicksStatistic;
+using UrlShortener.Application.Interfaces;
 
 namespace UrlShortener.WebUI.Controllers
 {
@@ -16,16 +18,14 @@ namespace UrlShortener.WebUI.Controllers
             _mediator = mediator;
         }
 
+        [ProducesResponseType(typeof(PaginatedList<GetClicksResponse>), (int)HttpStatusCode.OK)]
+        [ProducesErrorResponseType(typeof(ValidationProblemDetails))]
         [HttpGet]
-        public async Task<IActionResult> GetClicks(int pageIndex = 0, int pageSize = 20)
+        public async Task<IActionResult> GetClicks([FromQuery] GetClicksRequest request)
         {
-            var result = await _mediator.Send(new GetClicksRequest
-            {
-                PageIndex = pageIndex,
-                PageSize = pageSize
-            });
+            var result = await _mediator.Send(request);
 
-            return Ok(result);
+            return Json(result);
         }
     }
 }

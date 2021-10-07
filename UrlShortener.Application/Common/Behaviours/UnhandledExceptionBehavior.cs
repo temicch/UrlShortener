@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
@@ -22,7 +23,7 @@ namespace UrlShortener.Application.Implementation.Common.Behaviours
             {
                 return await next();
             }
-            catch (Exception ex)
+            catch (Exception ex) when (!(ex is ValidationException))
             {
                 var requestName = typeof(TRequest).Name;
 

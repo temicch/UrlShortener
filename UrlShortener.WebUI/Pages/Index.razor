@@ -22,8 +22,12 @@
             <FormItem>
                 <Row>
                     <AntDesign.Col Xs="24" Md="20">
-                        <AntDesign.Input Placeholder="Paste a Long URL (ex. https://google.com 😅)" AllowClear Size="large"
-                                         @bind-Value="@Model.Link">
+                        <AntDesign.Input
+                            Placeholder="Paste a Long URL (ex. https://google.com 😅)"
+                            AllowClear
+                            AutoFocus
+                            Size="large"
+                            @bind-Value="@Model.Link">
                             <Prefix>
                                 <Icon Type="link" Theme="outline"/>
                             </Prefix>
@@ -45,19 +49,22 @@
             </FormItem>
             @if (Model.IsAliasUsed)
             {
-                <FormItem WrapperColSpan="24">
+                <FormItem>
                     <AntDesign.Input @bind-Value="@Model.SuggestedAlias"
                                      Placeholder="alias"
                                      AllowClear
                                      AutoFocus>
-                        <Prefix>@NavigationManager.ToAbsoluteUri("s/").ToString()</Prefix>
+                        <AddOnBefore>@NavigationManager.ToAbsoluteUri("s/").ToString()</AddOnBefore>
                     </AntDesign.Input>
                 </FormItem>
             }
         </Form>
         @if (shortResult != null)
         {
-            <Paragraph Copyable Underline CopyConfig=@(new TypographyCopyableConfig { OnCopy = async () => await OnCopyClick(shortResult.Alias) })>
+            <Paragraph
+                Copyable
+                Underline
+                CopyConfig=@(new TypographyCopyableConfig { OnCopy = async () => await OnCopyClick(shortResult.Alias) })>
                 <a href="@shortResult.Alias" target="_blank">@shortResult.Alias</a>
             </Paragraph>
         }
@@ -89,9 +96,17 @@
 
             await Task.Delay(1);
 
-            var request = Mapper.Map<CreateLinkRequest>(Model);
+            var request = await Mediator.Send(Mapper.Map<CreateLinkRequest>(Model));
 
-            shortResult = await Mediator.Send(request);
+            if (request.IsFailure)
+            {
+    // Do not need to wait
+#pragma warning disable CS4014
+                message.Error(request.Error);
+                return;
+            }
+
+            shortResult = request.Value;
 
             shortResult.Alias = NavigationManager.ToAbsoluteUri($"s/{shortResult.Alias}").ToString();
         }

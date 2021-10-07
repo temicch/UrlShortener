@@ -2,8 +2,8 @@
 {
     public interface IUrlShortenerService
     {
-        public bool TryShortUrl(string urlString, out string alias, string salt = "");
-        public string NormalizeUrl(string urlString);
-        public bool IsValidUrl(string urlString);
+        public bool TryShortUrl(string encodedUrl, out string alias, string salt = "");
+        public string NormalizeUrl(string encodedUrl);
+        public bool IsValidUrl(string encodedUrl);
     }
 }

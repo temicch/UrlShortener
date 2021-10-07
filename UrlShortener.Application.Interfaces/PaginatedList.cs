@@ -5,15 +5,18 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 
-namespace UrlShortener.Application.Implementation.Common
+namespace UrlShortener.Application.Interfaces
 {
     public class PaginatedList<T>
     {
-        public PaginatedList(List<T> items, int count, int pageIndex, int pageSize)
+        public PaginatedList(List<T> items, int totalCount, int pageIndex, int pageSize)
         {
+            if (totalCount < 0)
+                throw new ArgumentOutOfRangeException(nameof(totalCount), "Total count must be non negative value");
+
             PageIndex = pageIndex;
-            TotalPages = (int)Math.Ceiling(count / (double)pageSize);
-            TotalCount = count;
+            TotalPages = (int)Math.Ceiling(totalCount / (double)pageSize);
+            TotalCount = totalCount;
             Items = items;
         }
 
@@ -23,8 +26,8 @@ namespace UrlShortener.Application.Implementation.Common
         public int TotalCount { get; }
 
         public bool HasPreviousPage => PageIndex + 1 > 1;
-
         public bool HasNextPage => PageIndex + 1 < TotalPages;
+        public bool IsPageExists => PageIndex < TotalPages;
     }
 
     public static class PaginatedListExtensions

@@ -1,4 +1,6 @@
 using System.Reflection;
+using FluentValidation.AspNetCore;
+using MicroElements.Swashbuckle.FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -7,6 +9,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using UrlShortener.Application.Implementation;
 using UrlShortener.Infrastructure;
+using UrlShortener.WebUI.Middleware;
 
 namespace UrlShortener.WebUI
 {
@@ -26,8 +29,11 @@ namespace UrlShortener.WebUI
 
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
-            services.AddControllers();
+            services.AddControllers()
+                .AddFluentValidation();
+
             services.AddSwaggerGen(c => { c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" }); });
+            services.AddFluentValidationRulesToSwagger();
 
             services.AddWebOptimizer(pipeline => { pipeline.CompileScssFiles(null, "css/**/*.*css"); });
 
@@ -51,8 +57,11 @@ namespace UrlShortener.WebUI
                 app.UseHsts();
             }
 
+            app.UseMiddleware<ApiErrorWrappingMiddleware>();
+
             app.UseHttpsRedirection();
             app.UseWebOptimizer();
+
             app.UseStaticFiles();
 
             app.UseRouting();

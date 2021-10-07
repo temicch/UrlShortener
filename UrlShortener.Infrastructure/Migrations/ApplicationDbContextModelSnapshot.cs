@@ -27,6 +27,7 @@ namespace UrlShortener.Infrastructure.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("LinkId")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
@@ -64,7 +65,9 @@ namespace UrlShortener.Infrastructure.Migrations
                 {
                     b.HasOne("UrlShortener.Domain.Entities.ShortLink", "Link")
                         .WithMany()
-                        .HasForeignKey("LinkId");
+                        .HasForeignKey("LinkId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Link");
                 });

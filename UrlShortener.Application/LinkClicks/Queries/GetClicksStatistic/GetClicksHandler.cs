@@ -24,14 +24,7 @@ namespace UrlShortener.Application.Implementation.LinkClicks.Queries.GetClicksSt
             CancellationToken cancellationToken)
         {
             return await _dbContext.LinkClicks
-                //.GroupBy(x => new LinkAlias(x.Link.Link, x.Link.Alias, x.Link.Id, x.Link.CreatedAt))
-                .GroupBy(x => new ShortLink
-                {
-                    Link = x.Link.Link,
-                    Alias = x.Link.Alias,
-                    Id = x.Link.Id,
-                    CreatedAt = x.Link.CreatedAt
-                })
+                .GroupBy(x => new ShortLink(x.Link.Id, x.Link.Link, x.Link.Alias, x.Link.CreatedAt))
                 .OrderByDescending(x => x.Count())
                 .ProjectTo<GetClicksResponse>(_configurationProvider)
                 .ToPaginatedListAsync(request.PageIndex, request.PageSize, cancellationToken);
