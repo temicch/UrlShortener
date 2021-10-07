@@ -12,7 +12,7 @@ namespace UrlShortener.Application.Implementation
     {
         public MappingProfile()
         {
-            CreateMap<LinkClickEvent, LinkClick>()
+            CreateMap<LinkRequestedEvent, LinkClick>()
                 .ForMember(x => x.Link, y => y.MapFrom(z => z.Payload));
 
             this.ApplyMappingsFromAssembly(Assembly.GetExecutingAssembly());

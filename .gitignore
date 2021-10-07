@@ -361,3 +361,7 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+.idea/
+
+UrlShortener.WebUI/url_shorter.db

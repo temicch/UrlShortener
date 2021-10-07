@@ -25,7 +25,8 @@ namespace UrlShortener.Infrastructure
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
-            foreach (var entry in ChangeTracker.Entries<AuditableEntity>().Where(x => x.State == EntityState.Added))
+            foreach (var entry in ChangeTracker.Entries<AuditableEntity>()
+                .Where(x => x.State == EntityState.Added))
                 entry.Entity.CreatedAt = entry.Entity.CreatedAt == default ? _dateTime.Now : entry.Entity.CreatedAt;
 
             return await base.SaveChangesAsync(cancellationToken);

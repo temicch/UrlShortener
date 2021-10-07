@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using UrlShortener.Application.Interfaces;
 
 namespace UrlShortener.Application.Implementation.Common
 {

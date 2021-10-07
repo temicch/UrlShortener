@@ -1,13 +1,10 @@
-﻿using System;
+﻿using CSharpFunctionalExtensions;
 using MediatR;
-using UrlShortener.Application.Interfaces;
-using UrlShortener.Domain.Common;
 using UrlShortener.Domain.Entities;
-using UrlShortener.Domain.Events;
 
 namespace UrlShortener.Application.Implementation.ShortLinks.Queries.GetLink
 {
-    public class GetLinkRequest : IRequest<ShortLink>, INotify<ShortLink>
+    public class GetLinkRequest : IRequest<IResult<ShortLink>>
     {
         public GetLinkRequest(string alias)
         {
@@ -15,8 +12,5 @@ namespace UrlShortener.Application.Implementation.ShortLinks.Queries.GetLink
         }
 
         public string Alias { get; set; }
-
-        public Func<ShortLink, DateTime?, DomainEvent<ShortLink>> Event =>
-            (response, time) => new LinkClickEvent(response, time);
     }
 }

@@ -3,6 +3,7 @@ using System.Net;
 using AutoMapper;
 using FluentValidation;
 using UrlShortener.Application.Implementation.ShortLinks.Commands.CreateLink;
+using UrlShortener.Application.Interfaces.Common;
 using UrlShortener.Application.Interfaces.Mapping;
 using UrlShortener.Application.Interfaces.Services;
 
@@ -17,7 +18,6 @@ namespace UrlShortener.WebUI.Models
         public void Mapping(Profile profile)
         {
             profile.CreateMap<CreateLink, CreateLinkRequest>()
-                .ConstructUsing(_ => new CreateLinkRequest())
                 .ForMember(x => x.SuggestedAlias,
                     y => y.MapFrom(x => x.IsAliasUsed ? x.SuggestedAlias : string.Empty))
                 .ForMember(x => x.Link, y => y.MapFrom(z => WebUtility.UrlEncode(z.Link)));
@@ -41,7 +41,7 @@ namespace UrlShortener.WebUI.Models
                     .Cascade(CascadeMode.Stop)
                     .NotEmpty()
                     .WithMessage("Please enter an alias")
-                    .Length(3, 30)
+                    .Length(Constants.ALIAS_MIN_LENGTH, Constants.ALIAS_MAX_LENGTH)
                     .WithMessage("Incorrect length of alias, it must be from {MinLength} to {MaxLength}")
                     .Must(x => x.All(x => char.IsLetterOrDigit(x)))
                     .WithMessage("Alias must contain only letters or digits");
