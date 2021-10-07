@@ -8,32 +8,32 @@ namespace UrlShortener.Application.Implementation.Services
 {
     public class UrlShortenerService : IUrlShortenerService
     {
-        public bool TryShortUrl(string urlString, out string alias, string salt = "")
+        public bool TryShortUrl(string encodedUrl, out string alias, string salt = "")
         {
             alias = string.Empty;
 
-            if (string.IsNullOrEmpty(urlString))
+            if (string.IsNullOrEmpty(encodedUrl))
                 return false;
 
-            var encoded = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(urlString + salt));
+            var encoded = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(encodedUrl + salt));
 
             alias = encoded.Length > 7 ? encoded[^7..] : encoded;
 
             return true;
         }
 
-        public string NormalizeUrl(string urlString)
+        public string NormalizeUrl(string encodedUrl)
         {
-            urlString = WebUtility.UrlDecode(urlString);
+            var decodedUrl = WebUtility.UrlDecode(encodedUrl);
 
-            Uri.TryCreate(urlString, UriKind.Absolute, out var result);
+            Uri.TryCreate(decodedUrl, UriKind.Absolute, out var result);
 
             return result == null || !IsSupportedScheme(result.Scheme) ? string.Empty : result.AbsoluteUri;
         }
 
-        public bool IsValidUrl(string urlString)
+        public bool IsValidUrl(string encodedUrl)
         {
-            return !string.IsNullOrEmpty(NormalizeUrl(urlString));
+            return !string.IsNullOrEmpty(NormalizeUrl(encodedUrl));
         }
 
         /// <summary>
@@ -41,7 +41,7 @@ namespace UrlShortener.Application.Implementation.Services
         /// </summary>
         /// <param name="scheme"></param>
         /// <returns><see langword="true" /> if specified scheme supported, <see langword="false" /> otherwise</returns>
-        protected bool IsSupportedScheme(string scheme)
+        protected virtual bool IsSupportedScheme(string scheme)
         {
             return true;
         }

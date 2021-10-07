@@ -1,4 +1,4 @@
-using System.Linq;
+﻿using System.Linq;
 using FluentValidation;
 using UrlShortener.Application.Interfaces.Common;
 using UrlShortener.Application.Interfaces.Services;
@@ -19,7 +19,7 @@ namespace UrlShortener.Application.Implementation.ShortLinks.Commands.CreateLink
             {
                 Transform(x => x.SuggestedAlias, y => y?.Trim())
                     .Cascade(CascadeMode.Stop)
-                    .Length(3, 30)
+                    .Length(Constants.ALIAS_MIN_LENGTH, Constants.ALIAS_MAX_LENGTH)
                     .Must(x => x.All(x => char.IsLetterOrDigit(x)))
                     .WithMessage("Alias must contain only letters or digits");
             });
