@@ -1,14 +1,13 @@
-﻿using System.Linq;
+using System.Linq;
 using FluentValidation;
-using Microsoft.EntityFrameworkCore;
-using UrlShortener.Application.Interfaces;
+using UrlShortener.Application.Interfaces.Common;
 using UrlShortener.Application.Interfaces.Services;
 
 namespace UrlShortener.Application.Implementation.ShortLinks.Commands.CreateLink
 {
     public class CreateLinkValidator : AbstractValidator<CreateLinkRequest>
     {
-        public CreateLinkValidator(IUrlShortenerService urlShortenerService, IDbContext dbContext)
+        public CreateLinkValidator(IUrlShortenerService urlShortenerService)
         {
             Transform(x => x.Link, y => y?.Trim())
                 .Cascade(CascadeMode.Stop)
@@ -22,12 +21,7 @@ namespace UrlShortener.Application.Implementation.ShortLinks.Commands.CreateLink
                     .Cascade(CascadeMode.Stop)
                     .Length(3, 30)
                     .Must(x => x.All(x => char.IsLetterOrDigit(x)))
-                    .WithMessage("Alias must contain only letters or digits")
-                    .MustAsync(async (x, cancellationToken) =>
-                        !await dbContext.ShortLinks
-                            .Where(y => y.Alias == x)
-                            .AnyAsync(cancellationToken))
-                    .WithMessage("Link with specified alias is exists. Try to specify another one");
+                    .WithMessage("Alias must contain only letters or digits");
             });
         }
     }
