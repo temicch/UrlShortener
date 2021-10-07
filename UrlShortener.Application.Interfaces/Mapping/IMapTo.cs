@@ -2,6 +2,11 @@
 
 namespace UrlShortener.Application.Interfaces.Mapping
 {
+    /// <summary>
+    ///     <para>
+    ///         Mapping this type to <typeparamref name="TTo" />
+    ///     </para>
+    /// </summary>
     public interface IMapTo<TTo>
     {
         /// <summary>

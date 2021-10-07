@@ -2,6 +2,11 @@
 
 namespace UrlShortener.Application.Interfaces.Mapping
 {
+    /// <summary>
+    ///     <para>
+    ///         Mapping from <typeparamref name="TFrom" /> to this type
+    ///     </para>
+    /// </summary>
     public interface IMapFrom<TFrom>
     {
         /// <summary>

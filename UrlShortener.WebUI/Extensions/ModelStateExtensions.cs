@@ -8,7 +8,8 @@ namespace UrlShortener.WebUI.Extensions
         public static void AddModelErrors(this ModelStateDictionary dictionary,
             ValidationException exception)
         {
-            foreach (var error in exception.Errors) dictionary.AddModelError(error.PropertyName, error.ErrorMessage);
+            foreach (var error in exception.Errors) dictionary.AddModelError(error.PropertyName,
+                error.ErrorMessage);
         }
     }
 }

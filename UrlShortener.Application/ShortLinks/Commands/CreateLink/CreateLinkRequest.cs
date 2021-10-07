@@ -3,11 +3,23 @@ using MediatR;
 
 namespace UrlShortener.Application.Implementation.ShortLinks.Commands.CreateLink
 {
+    /// <summary>
+    ///     Represents request for creating <see cref="Domain.Entities.ShortLink" />
+    /// </summary>
     public class CreateLinkRequest : IRequest<IResult<CreateLinkResponse>>
     {
-        public CreateLinkRequest(string link, string suggestedAlias = null)
+        /// <summary>
+        ///     <para>
+        ///         Create <see cref="Domain.Entities.ShortLink" />
+        ///     </para>
+        ///     <para>
+        ///         Alias will be generated automatically if
+        ///         <paramref name="suggestedAlias" /> is <see langword="null" />
+        ///     </para>
+        /// </summary>
+        public CreateLinkRequest(string encodedUrl, string suggestedAlias = null)
         {
-            Link = link;
+            Link = encodedUrl;
             SuggestedAlias = suggestedAlias;
         }
 

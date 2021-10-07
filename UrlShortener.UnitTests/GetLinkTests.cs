@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using AutoMapper;
 using FluentAssertions;
 using MockQueryable.Moq;
 using Moq;
@@ -26,6 +27,8 @@ namespace UrlShortener.Application.UnitTests
             var dbContext = new Mock<IDbContext>();
             dbContext.Setup(x => x.ShortLinks).Returns(fakeData.Object);
 
+            var mapper = new Mock<IMapper>();
+
             var domainEventService = new Mock<IDomainEventService>();
             var dateTime = new Mock<IDateTimeService>();
 
@@ -49,6 +52,8 @@ namespace UrlShortener.Application.UnitTests
 
             var dbContext = new Mock<IDbContext>();
             dbContext.Setup(x => x.ShortLinks).Returns(fakeData.Object);
+
+            var mapper = new Mock<IMapper>();
 
             var domainEventService = new Mock<IDomainEventService>();
             var dateTime = new Mock<IDateTimeService>();

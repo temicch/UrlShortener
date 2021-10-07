@@ -7,6 +7,9 @@ using MediatR;
 
 namespace UrlShortener.Application.Implementation.Common.Behaviours
 {
+    /// <summary>
+    ///     Behavior for <c>Fluent Validation</c> functionality
+    /// </summary>
     public class ValidationBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
     {
         private readonly IEnumerable<IValidator<TRequest>> _validators;

@@ -1,8 +1,13 @@
 ﻿using MediatR;
-using UrlShortener.Application.Interfaces;
 
-namespace UrlShortener.Application.Implementation.Common
+namespace UrlShortener.Application.Interfaces
 {
+    /// <summary>
+    ///     Paginated request for <see cref="IRequestHandler{TRequest,TResponse}" />
+    /// </summary>
+    /// <typeparam name="TResponse">
+    ///     <see cref="PaginatedList{TResponse}"> type
+    /// </typeparam>
     public abstract class PaginatedRequest<TResponse> : IRequest<PaginatedList<TResponse>>
     {
         protected PaginatedRequest(int pageIndex = 0, int pageSize = 20)

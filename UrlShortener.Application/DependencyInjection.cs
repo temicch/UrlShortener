@@ -10,6 +10,9 @@ namespace UrlShortener.Application.Implementation
 {
     public static class DependencyInjection
     {
+        /// <summary>
+        ///     Add services for <c>Application layer</c> working
+        /// </summary>
         public static IServiceCollection AddApplication(this IServiceCollection services)
         {
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
