@@ -3,7 +3,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
-using UrlShortener.Application.Implementation.Common;
 using UrlShortener.Application.Interfaces;
 using UrlShortener.Domain.Entities;
 

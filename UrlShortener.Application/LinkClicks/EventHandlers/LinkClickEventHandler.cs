@@ -7,6 +7,14 @@ using UrlShortener.Domain.Entities;
 
 namespace UrlShortener.Application.Implementation.LinkClicks.EventHandlers
 {
+    /// <summary>
+    ///     <para>
+    ///         Handler for <see cref="Domain.Events.LinkRequestedEvent" />
+    ///     </para>
+    ///     <para>
+    ///         Fixes a request as a click on a <see cref="ShortLink" />
+    ///     </para>
+    /// </summary>
     public class LinkClickEventHandler : IEventHandler<ShortLink>
     {
         private readonly IDbContext _dbContext;

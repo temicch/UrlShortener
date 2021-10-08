@@ -38,7 +38,7 @@ namespace UrlShortener.Application.IntegrationTests.Common
                         {
                             dbContext.Database.Migrate();
                         }
-                        catch (Exception exception)
+                        catch (Exception)
                         {
                         }
                     }

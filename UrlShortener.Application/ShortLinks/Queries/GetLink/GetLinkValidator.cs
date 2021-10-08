@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using UrlShortener.Application.Interfaces.Extensions;
 
 namespace UrlShortener.Application.Implementation.ShortLinks.Queries.GetLink
 {
@@ -7,8 +8,7 @@ namespace UrlShortener.Application.Implementation.ShortLinks.Queries.GetLink
         public GetLinkValidator()
         {
             Transform(x => x.Alias, y => y.Trim())
-                .NotEmpty()
-                .Length(3, 30);
+                .CorrectAlias();
         }
     }
 }

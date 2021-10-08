@@ -8,6 +8,9 @@ namespace UrlShortener.Infrastructure
 {
     public static class DependencyInjection
     {
+        /// <summary>
+        ///     Add services for <c>Infrastructure layer</c> working
+        /// </summary>
         public static IServiceCollection AddInfrastructure(this IServiceCollection services,
             IConfiguration Configuration)
         {

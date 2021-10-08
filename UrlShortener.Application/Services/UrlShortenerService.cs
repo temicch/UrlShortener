@@ -40,7 +40,10 @@ namespace UrlShortener.Application.Implementation.Services
         ///     Support any scheme
         /// </summary>
         /// <param name="scheme"></param>
-        /// <returns><see langword="true" /> if specified scheme supported, <see langword="false" /> otherwise</returns>
+        /// <returns>
+        ///     <see langword="true" /> if specified scheme supported,
+        ///     <see langword="false" /> otherwise
+        /// </returns>
         protected virtual bool IsSupportedScheme(string scheme)
         {
             return true;
