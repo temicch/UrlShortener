@@ -18,6 +18,13 @@ namespace UrlShortener.WebUI.Controllers
             _mediator = mediator;
         }
 
+        /// <summary>
+        ///     Get information about clicks on links
+        /// </summary>
+        /// <remarks>
+        ///     Information such as the link itself, the date of the last click on it and the
+        ///     total number of clicks will be received
+        /// </remarks>
         [ProducesResponseType(typeof(PaginatedList<GetClicksResponse>), (int)HttpStatusCode.OK)]
         [ProducesErrorResponseType(typeof(ValidationProblemDetails))]
         [HttpGet]

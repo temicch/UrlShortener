@@ -19,7 +19,8 @@ namespace UrlShortener.Application.Implementation.Services
         public async Task PublishAsync<TEventPayload>(DomainEvent<TEventPayload> domainEvent,
             CancellationToken cancellationToken = default)
         {
-            await _mediator.Publish(new DomainEventNotification<TEventPayload>(domainEvent), cancellationToken);
+            await _mediator.Publish(new DomainEventNotification<TEventPayload>(domainEvent),
+                cancellationToken);
         }
     }
 }

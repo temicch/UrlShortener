@@ -1,3 +1,5 @@
+using System;
+using System.IO;
 using System.Reflection;
 using FluentValidation.AspNetCore;
 using MicroElements.Swashbuckle.FluentValidation.AspNetCore;
@@ -32,7 +34,13 @@ namespace UrlShortener.WebUI
             services.AddControllers()
                 .AddFluentValidation();
 
-            services.AddSwaggerGen(c => { c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" }); });
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
+
+                var filePath = Path.Combine(AppContext.BaseDirectory, "SwaggerHelper.xml");
+                c.IncludeXmlComments(filePath);
+            });
             services.AddFluentValidationRulesToSwagger();
 
             services.AddWebOptimizer(pipeline => { pipeline.CompileScssFiles(null, "css/**/*.*css"); });

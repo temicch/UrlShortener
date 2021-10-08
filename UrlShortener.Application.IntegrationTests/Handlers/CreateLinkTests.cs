@@ -63,6 +63,20 @@ namespace UrlShortener.Application.IntegrationTests.Handlers
         }
 
         [Theory]
+        [ClassData(typeof(ValidAliases))]
+        public async Task CreateLink_WithValidAlias_Successed(string alias)
+        {
+            // Assign
+            var url = (string)new ValidUrls().First()[0];
+
+            // Act
+            Func<Task> result = async () => await _mediator.Send(new CreateLinkRequest(url, alias));
+
+            // Assert
+            await result.Should().NotThrowAsync<ValidationException>();
+        }
+
+        [Theory]
         [ClassData(typeof(InvalidAliases))]
         public async Task CreateLink_WithInvalidAlias_Failed(string alias)
         {
