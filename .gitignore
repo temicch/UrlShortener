@@ -365,3 +365,5 @@ FodyWeavers.xsd
 .idea/
 
 UrlShortener.WebUI/url_shorter.db
+
+UrlShortener.WebUI/SwaggerHelper.xml

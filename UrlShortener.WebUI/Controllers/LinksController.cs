@@ -21,6 +21,24 @@ namespace UrlShortener.WebUI.Controllers
             _mediator = mediator;
         }
 
+        /// <summary>
+        ///     Create link for specified URL address.
+        /// </summary>
+        /// <remarks>
+        ///     <para>
+        ///         You must encode 'Link' parameter before submitting it otherwise application
+        ///         will not properly support URLs containing symbols such as hash,
+        ///         semicolon, plus and ampersand (among others).
+        ///     </para>
+        ///     <para>
+        ///         You can specify the 'SuggestedAlias' parameter if you'd like to pick a shortened
+        ///         URL instead of having randomly generate one. These must be between 3 and 30
+        ///         characters long and can only contain alphanumeric characters and underscores.
+        ///         Shortened URLs are case sensitive.
+        ///     </para>
+        /// </remarks>
+        /// <response code="200">Returns the newly created link</response>
+        /// <response code="400">Returns validation or another problem</response>
         [ProducesResponseType(typeof(CreateLinkResponse), (int)HttpStatusCode.OK)]
         [ProducesErrorResponseType(typeof(ValidationProblemDetails))]
         [HttpPost]
@@ -31,6 +49,11 @@ namespace UrlShortener.WebUI.Controllers
             return Ok(result);
         }
 
+        /// <summary>
+        ///     Redirects to URL with specified <paramref name="alias" />
+        /// </summary>
+        /// <response code="302">Redirect to URL address</response>
+        /// <response code="404">Link with specified Alias not found</response>
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.Redirect)]
         [ProducesErrorResponseType(typeof(ValidationProblemDetails))]
@@ -47,6 +70,10 @@ namespace UrlShortener.WebUI.Controllers
             return Redirect(uri);
         }
 
+        /// <summary>
+        ///     Get all app generated links
+        /// </summary>
+        /// <response code="200">Returns all application links</response>
         [ProducesResponseType(typeof(PaginatedList<GetLinksResponse>), (int)HttpStatusCode.OK)]
         [ProducesErrorResponseType(typeof(ValidationProblemDetails))]
         [HttpGet]
