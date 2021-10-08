@@ -43,8 +43,8 @@ namespace UrlShortener.WebUI.Models
                     .WithMessage("Please enter an alias")
                     .Length(Constants.ALIAS_MIN_LENGTH, Constants.ALIAS_MAX_LENGTH)
                     .WithMessage("Incorrect length of alias, it must be from {MinLength} to {MaxLength}")
-                    .Must(x => x.All(x => char.IsLetterOrDigit(x)))
-                    .WithMessage("Alias must contain only letters or digits");
+                    .Must(x => x.All(x => char.IsLetterOrDigit(x) || x == '_'))
+                    .WithMessage("Alias must contain only letters, digits or underscores");
             });
         }
     }

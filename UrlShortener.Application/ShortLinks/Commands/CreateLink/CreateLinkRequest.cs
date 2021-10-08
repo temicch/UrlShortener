@@ -1,4 +1,4 @@
-﻿using CSharpFunctionalExtensions;
+using CSharpFunctionalExtensions;
 using MediatR;
 
 namespace UrlShortener.Application.Implementation.ShortLinks.Commands.CreateLink
@@ -21,6 +21,10 @@ namespace UrlShortener.Application.Implementation.ShortLinks.Commands.CreateLink
         {
             Link = encodedUrl;
             SuggestedAlias = suggestedAlias;
+        }
+
+        public CreateLinkRequest()
+        {
         }
 
         public string Link { get; set; }

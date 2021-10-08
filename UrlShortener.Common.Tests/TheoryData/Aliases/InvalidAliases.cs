@@ -10,11 +10,11 @@ namespace UrlShortener.Common.Tests.TheoryData.Aliases
             Add("dd");
             Add("00");
             Add("-_-");
-            Add("google_");
+            Add("google-");
             Add("@google@");
             Add("@#$$@$!@#");
             Add("00000000000)00000000000000");
-            Add("dasddddddddddddddd_dsadsad");
+            Add("dasddddddddddddddd-dsadsad");
             Add("000000000000000000000000000000000000000000000000");
         }
     }
