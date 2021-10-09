@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Net;
 using System.Threading.Tasks;
 using MediatR;
@@ -46,7 +46,9 @@ namespace UrlShortener.WebUI.Controllers
         {
             var result = await _mediator.Send(request);
 
-            return Ok(result);
+            if (result.IsSuccess)
+                return Ok(result.Value);
+            return BadRequest(result.Error);
         }
 
         /// <summary>
