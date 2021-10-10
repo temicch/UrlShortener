@@ -7,7 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using UrlShortener.Application.Interfaces;
 using UrlShortener.Infrastructure;
 
-namespace UrlShortener.Application.IntegrationTests.Common
+namespace UrlShortener.Common.Tests.Common
 {
     public class TestFixture<TStartup> : WebApplicationFactory<TStartup> where TStartup : class
     {

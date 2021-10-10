@@ -6,12 +6,6 @@ namespace UrlShortener.Common.Tests.TheoryData.Aliases
     {
         public ValidAliases()
         {
-            // Those aliases means that alias will be generated automatically
-            // (they are formally valid)
-            Add(null);
-            Add(string.Empty);
-            Add("            ");
-            // --------------------------------------------------------------
             Add("ddd");
             Add("google");
             Add("goo_gle");

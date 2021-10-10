@@ -7,7 +7,7 @@ using UrlShortener.Application.Interfaces;
 using UrlShortener.WebUI;
 using Xunit;
 
-namespace UrlShortener.Application.IntegrationTests.Common
+namespace UrlShortener.Common.Tests.Common
 {
     public abstract class IntegrationTestBase : IClassFixture<TestFixture<Startup>>, IDisposable
     {
@@ -29,7 +29,7 @@ namespace UrlShortener.Application.IntegrationTests.Common
             transaction = ((DbContext)_dbContext).Database.BeginTransaction();
         }
 
-        public void Dispose()
+        public virtual void Dispose()
         {
             transaction.Dispose();
             _scope.Dispose();

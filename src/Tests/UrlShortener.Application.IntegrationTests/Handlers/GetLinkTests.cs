@@ -2,9 +2,9 @@
 using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
-using UrlShortener.Application.IntegrationTests.Common;
 using UrlShortener.Application.UseCases.ShortLinks.Commands.CreateLink;
 using UrlShortener.Application.UseCases.ShortLinks.Queries.GetLink;
+using UrlShortener.Common.Tests.Common;
 using UrlShortener.Common.Tests.TheoryData.Urls;
 using UrlShortener.WebUI;
 using Xunit;

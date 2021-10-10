@@ -41,7 +41,8 @@ namespace UrlShortener.WebUI
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
 
                 var filePath = Path.Combine(AppContext.BaseDirectory, "SwaggerHelper.xml");
-                c.IncludeXmlComments(filePath);
+                if (File.Exists(filePath))
+                    c.IncludeXmlComments(filePath);
             });
             services.AddFluentValidationRulesToSwagger();
 
