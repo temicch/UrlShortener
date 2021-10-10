@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using UrlShortener.Application.Interfaces;
 using UrlShortener.Application.Interfaces.Services;
 using UrlShortener.Domain.Entities;
+using UrlShortener.Domain.Events;
 
 namespace UrlShortener.Application.Implementation.ShortLinks.Commands.CreateLink
 {
@@ -17,15 +18,19 @@ namespace UrlShortener.Application.Implementation.ShortLinks.Commands.CreateLink
         public const int COUNT_OF_SHORT_LINK_RETRY = 100;
 
         private readonly IDbContext _dbContext;
+        private readonly IDomainEventService _domainEventService;
         private readonly IMapper _mapper;
         private readonly Random _rand = new();
         private readonly IUrlShortenerService _urlShortenerService;
 
-        public CreateLinkHandler(IDbContext dbContext, IUrlShortenerService urlShortenerService, IMapper mapper)
+        public CreateLinkHandler(IDbContext dbContext, IUrlShortenerService urlShortenerService,
+            IMapper mapper,
+            IDomainEventService domainEventService)
         {
             _dbContext = dbContext;
             _urlShortenerService = urlShortenerService;
             _mapper = mapper;
+            _domainEventService = domainEventService;
         }
 
         public async Task<IResult<CreateLinkResponse>> Handle(CreateLinkRequest request,
@@ -57,6 +62,8 @@ namespace UrlShortener.Application.Implementation.ShortLinks.Commands.CreateLink
             _dbContext.ShortLinks.Add(shortLink);
 
             await _dbContext.SaveChangesAsync(cancellationToken);
+
+            await _domainEventService.PublishAsync(new LinkCreatedEvent(shortLink), cancellationToken);
 
             return Result.Success(_mapper.Map<CreateLinkResponse>(shortLink));
         }
