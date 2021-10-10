@@ -5,7 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 
-namespace UrlShortener.Application.Interfaces
+namespace UrlShortener.Application.Interfaces.Paginated
 {
     /// <summary>
     ///     Represent strongle typed <see cref="List{T}" /> with paginated params like page index, page size

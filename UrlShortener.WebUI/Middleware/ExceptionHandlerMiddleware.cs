@@ -10,14 +10,14 @@ using UrlShortener.WebUI.Extensions;
 
 namespace UrlShortener.WebUI.Middleware
 {
-    public class ApiErrorWrappingMiddleware
+    public class ExceptionHandlerMiddleware
     {
-        private readonly ILogger<ApiErrorWrappingMiddleware> _logger;
+        private readonly ILogger<ExceptionHandlerMiddleware> _logger;
         private readonly RequestDelegate _next;
         private readonly ProblemDetailsFactory _problemDetailsFactory;
 
-        public ApiErrorWrappingMiddleware(RequestDelegate next,
-            ILogger<ApiErrorWrappingMiddleware> logger,
+        public ExceptionHandlerMiddleware(RequestDelegate next,
+            ILogger<ExceptionHandlerMiddleware> logger,
             ProblemDetailsFactory problemDetailsFactory)
         {
             _next = next;

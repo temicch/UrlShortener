@@ -65,7 +65,7 @@ namespace UrlShortener.WebUI
                 app.UseHsts();
             }
 
-            app.UseMiddleware<ApiErrorWrappingMiddleware>();
+            app.UseMiddleware<ExceptionHandlerMiddleware>();
 
             app.UseHttpsRedirection();
             app.UseWebOptimizer();

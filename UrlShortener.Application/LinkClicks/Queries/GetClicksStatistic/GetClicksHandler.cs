@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using UrlShortener.Application.Interfaces;
+using UrlShortener.Application.Interfaces.Paginated;
 using UrlShortener.Domain.Entities;
 
 namespace UrlShortener.Application.Implementation.LinkClicks.Queries.GetClicksStatistic

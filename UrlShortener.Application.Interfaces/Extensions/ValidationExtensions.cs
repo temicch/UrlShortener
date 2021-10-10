@@ -1,12 +1,28 @@
 ﻿using System.Linq;
 using FluentValidation;
 using UrlShortener.Application.Interfaces.Common;
+using UrlShortener.Application.Interfaces.Paginated;
 using UrlShortener.Application.Interfaces.Services;
 
 namespace UrlShortener.Application.Interfaces.Extensions
 {
     public static class ValidationExtensions
     {
+        /// <summary>
+        ///     Default rules for <see cref="PaginatedRequest{TResponse}" />
+        /// </summary>
+        public static void RuleForPaginatedRequest<TRequest, TResponse>(
+            this AbstractValidator<TRequest> validationRules)
+            where TRequest : PaginatedRequest<TResponse>
+        {
+            validationRules.RuleFor(x => x.PageIndex)
+                .GreaterThanOrEqualTo(0);
+
+            validationRules.RuleFor(x => x.PageSize)
+                .GreaterThanOrEqualTo(0)
+                .LessThanOrEqualTo(100);
+        }
+
         public static IRuleBuilderOptions<T, string> CorrectAlias<T>(this IRuleBuilderInitial<T, string>
             ruleBuilder)
         {

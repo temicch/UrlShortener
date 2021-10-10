@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace UrlShortener.Application.Interfaces
+namespace UrlShortener.Application.Interfaces.Paginated
 {
     /// <summary>
     ///     Paginated request for <see cref="IRequestHandler{TRequest,TResponse}" />

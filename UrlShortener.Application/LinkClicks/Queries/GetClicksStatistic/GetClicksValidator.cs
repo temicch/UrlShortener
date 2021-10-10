@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using UrlShortener.Application.Implementation.Common;
+using UrlShortener.Application.Interfaces.Extensions;
 
 namespace UrlShortener.Application.Implementation.LinkClicks.Queries.GetClicksStatistic
 {

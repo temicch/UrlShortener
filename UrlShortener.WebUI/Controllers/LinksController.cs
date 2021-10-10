@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Net;
 using System.Threading.Tasks;
 using MediatR;
@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using UrlShortener.Application.Implementation.ShortLinks.Commands.CreateLink;
 using UrlShortener.Application.Implementation.ShortLinks.Queries.GetLink;
 using UrlShortener.Application.Implementation.ShortLinks.Queries.GetLinks;
-using UrlShortener.Application.Interfaces;
+using UrlShortener.Application.Interfaces.Paginated;
 
 namespace UrlShortener.WebUI.Controllers
 {

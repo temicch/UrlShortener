@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using UrlShortener.Application.Implementation.LinkClicks.Queries.GetClicksStatistic;
-using UrlShortener.Application.Interfaces;
+using UrlShortener.Application.Interfaces.Paginated;
 
 namespace UrlShortener.WebUI.Controllers
 {

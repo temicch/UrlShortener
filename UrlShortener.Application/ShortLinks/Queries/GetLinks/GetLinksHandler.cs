@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using UrlShortener.Application.Interfaces;
+using UrlShortener.Application.Interfaces.Paginated;
 
 namespace UrlShortener.Application.Implementation.ShortLinks.Queries.GetLinks
 {

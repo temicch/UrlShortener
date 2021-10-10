@@ -1,4 +1,4 @@
-﻿using UrlShortener.Application.Interfaces;
+﻿using UrlShortener.Application.Interfaces.Paginated;
 
 namespace UrlShortener.Application.Implementation.LinkClicks.Queries.GetClicksStatistic
 {

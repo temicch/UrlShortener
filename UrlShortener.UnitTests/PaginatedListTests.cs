@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using FluentAssertions;
-using UrlShortener.Application.Interfaces;
+using UrlShortener.Application.Interfaces.Paginated;
 using Xunit;
 
 namespace UrlShortener.Application.UnitTests
