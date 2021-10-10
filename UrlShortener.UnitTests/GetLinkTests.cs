@@ -10,8 +10,8 @@ using UrlShortener.Application.Implementation;
 using UrlShortener.Application.Implementation.ShortLinks.Queries.GetLink;
 using UrlShortener.Application.Interfaces;
 using UrlShortener.Application.Interfaces.Services;
-using UrlShortener.Domain.Common;
 using UrlShortener.Domain.Entities;
+using UrlShortener.Domain.Events;
 using Xunit;
 
 namespace UrlShortener.Application.UnitTests
@@ -47,7 +47,7 @@ namespace UrlShortener.Application.UnitTests
             var result = await handler.Handle(new GetLinkRequest(alias), default);
 
             // Assert
-            _domainEventService.Verify(x => x.PublishAsync(It.IsAny<DomainEvent<ShortLink>>(),
+            _domainEventService.Verify(x => x.PublishAsync(It.IsAny<LinkRequestedEvent>(),
                     It.IsAny<CancellationToken>()),
                 Times.Once);
             result.Should().NotBeNull();
@@ -67,7 +67,7 @@ namespace UrlShortener.Application.UnitTests
             var result = await handler.Handle(new GetLinkRequest(string.Empty), default);
 
             // Assert
-            _domainEventService.Verify(x => x.PublishAsync(It.IsAny<DomainEvent<ShortLink>>(),
+            _domainEventService.Verify(x => x.PublishAsync(It.IsAny<LinkRequestedEvent>(),
                     It.IsAny<CancellationToken>()),
                 Times.Never);
             result.IsFailure.Should().BeTrue();

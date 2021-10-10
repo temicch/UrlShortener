@@ -12,12 +12,12 @@ namespace UrlShortener.Application.Interfaces.Services
         /// <summary>
         ///     Asynchronously send an event to multiple handlers
         /// </summary>
-        /// <typeparam name="TEventPayload">Event payload</typeparam>
+        /// <typeparam name="TEvent"><see cref="DomainEvent"/></typeparam>
         /// <param name="domainEvent">Domain event</param>
         /// <param name="cancellationToken">
         ///     <see cref="CancellationToken" />
         /// </param>
-        Task PublishAsync<TEventPayload>(DomainEvent<TEventPayload> domainEvent,
-            CancellationToken cancellationToken = default);
+        Task PublishAsync<TEvent>(TEvent domainEvent,
+            CancellationToken cancellationToken = default) where TEvent : DomainEvent;
     }
 }

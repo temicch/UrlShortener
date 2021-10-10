@@ -3,13 +3,14 @@ using System.Threading.Tasks;
 using MediatR;
 using UrlShortener.Domain.Common;
 
-namespace UrlShortener.Application.Interfaces
+namespace UrlShortener.Application.Interfaces.Events
 {
     /// <summary>
-    ///     Event handler for <see cref="DomainEvent{TPayload}" />
+    ///     Event handler for <see cref="DomainEvent" />
     /// </summary>
-    /// <typeparam name="TEventPayload">Event payload</typeparam>
-    public interface IEventHandler<TEventPayload> : INotificationHandler<DomainEventNotification<TEventPayload>>
+    /// <typeparam name="TEvent">Event</typeparam>
+    public interface IEventHandler<TEvent> : INotificationHandler<DomainEventNotification<TEvent>>
+        where TEvent : DomainEvent
     {
         /// <summary>
         ///     This method used for mediator. It is recommended not to override it
@@ -18,20 +19,19 @@ namespace UrlShortener.Application.Interfaces
         /// <param name="cancellationToken">
         ///     <see cref="CancellationToken" />
         /// </param>
-        Task INotificationHandler<DomainEventNotification<TEventPayload>>.Handle(
-            DomainEventNotification<TEventPayload> notification,
-            CancellationToken cancellationToken)
+        Task INotificationHandler<DomainEventNotification<TEvent>>
+            .Handle(DomainEventNotification<TEvent> notification, CancellationToken cancellationToken)
         {
             return Handle(notification.Event, cancellationToken);
         }
 
         /// <summary>
-        ///     Handles a notification
+        ///     Handles an event
         /// </summary>
-        /// <param name="notification">Notification</param>
+        /// <param name="event">Event</param>
         /// <param name="cancellationToken">
         ///     <see cref="CancellationToken" />
         /// </param>
-        Task Handle(DomainEvent<TEventPayload> notification, CancellationToken cancellationToken = default);
+        Task Handle(TEvent @event, CancellationToken cancellationToken = default);
     }
 }

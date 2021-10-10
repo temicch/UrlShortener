@@ -2,5 +2,5 @@
 
 namespace UrlShortener.Domain.Common
 {
-    public abstract record DomainEvent<TPayload>(TPayload Payload, DateTime? CreatedAt = null);
+    public abstract record DomainEvent(DateTime? CreatedAt = null);
 }

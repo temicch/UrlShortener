@@ -2,20 +2,21 @@
 using System.Threading.Tasks;
 using AutoMapper;
 using UrlShortener.Application.Interfaces;
-using UrlShortener.Domain.Common;
+using UrlShortener.Application.Interfaces.Events;
 using UrlShortener.Domain.Entities;
+using UrlShortener.Domain.Events;
 
 namespace UrlShortener.Application.Implementation.LinkClicks.EventHandlers
 {
     /// <summary>
     ///     <para>
-    ///         Handler for <see cref="Domain.Events.LinkRequestedEvent" />
+    ///         Handler for <see cref="LinkRequestedEvent" />
     ///     </para>
     ///     <para>
     ///         Fixes a request as a click on a <see cref="ShortLink" />
     ///     </para>
     /// </summary>
-    public class LinkClickEventHandler : IEventHandler<ShortLink>
+    public class LinkClickEventHandler : IEventHandler<LinkRequestedEvent>
     {
         private readonly IDbContext _dbContext;
         private readonly IMapper _mapper;
@@ -26,9 +27,9 @@ namespace UrlShortener.Application.Implementation.LinkClicks.EventHandlers
             _mapper = mapper;
         }
 
-        public async Task Handle(DomainEvent<ShortLink> notification, CancellationToken cancellationToken)
+        public async Task Handle(LinkRequestedEvent @event, CancellationToken cancellationToken)
         {
-            var mapped = _mapper.Map<LinkClick>(notification);
+            var mapped = _mapper.Map<LinkClick>(@event);
 
             await _dbContext.LinkClicks.AddAsync(mapped);
 
