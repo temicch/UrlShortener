@@ -2,13 +2,15 @@
 using System.Net;
 using System.Text;
 using Microsoft.AspNetCore.WebUtilities;
+using UrlShortener.Application.Interfaces.Common;
 using UrlShortener.Application.Interfaces.Services;
 
 namespace UrlShortener.Application.Implementation.Services
 {
     public class UrlShortenerService : IUrlShortenerService
     {
-        public bool TryShortUrl(string encodedUrl, out string alias, string salt = "")
+        public bool TryShortUrl(string encodedUrl, out string alias,
+            int aliasLength = AppConstants.ALIAS_DEFAULT_LENGTH, string salt = "")
         {
             alias = string.Empty;
 
@@ -17,23 +19,26 @@ namespace UrlShortener.Application.Implementation.Services
 
             var encoded = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(encodedUrl + salt));
 
-            alias = encoded.Length > 7 ? encoded[^7..] : encoded;
+            alias = encoded.Length > aliasLength ? encoded[^aliasLength..] : encoded;
 
             return true;
         }
 
-        public string NormalizeUrl(string encodedUrl)
+        public bool TryNormalizeUrl(string encodedUrl, out string normalizedUrl)
         {
             var decodedUrl = WebUtility.UrlDecode(encodedUrl);
 
             Uri.TryCreate(decodedUrl, UriKind.Absolute, out var result);
 
-            return result == null || !IsSupportedScheme(result.Scheme) ? string.Empty : result.AbsoluteUri;
+            var isSupportedScheme = IsSupportedScheme(result?.Scheme);
+            normalizedUrl = isSupportedScheme ? result?.AbsoluteUri : null;
+
+            return isSupportedScheme && normalizedUrl != null;
         }
 
         public bool IsValidUrl(string encodedUrl)
         {
-            return !string.IsNullOrEmpty(NormalizeUrl(encodedUrl));
+            return TryNormalizeUrl(encodedUrl, out _);
         }
 
         /// <summary>

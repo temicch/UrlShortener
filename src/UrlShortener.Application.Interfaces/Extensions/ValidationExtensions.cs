@@ -29,7 +29,7 @@ namespace UrlShortener.Application.Interfaces.Extensions
             return ruleBuilder
                 .Cascade(CascadeMode.Stop)
                 .NotEmpty()
-                .Length(Constants.ALIAS_MIN_LENGTH, Constants.ALIAS_MAX_LENGTH)
+                .Length(AppConstants.ALIAS_MIN_LENGTH, AppConstants.ALIAS_MAX_LENGTH)
                 .Must(x => x.All(x => char.IsLetterOrDigit(x) || x == '_'))
                 .WithMessage("Alias must contain only letters, digits or undescores");
         }
