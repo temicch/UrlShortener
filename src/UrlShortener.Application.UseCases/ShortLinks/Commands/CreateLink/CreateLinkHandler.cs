@@ -38,7 +38,7 @@ namespace UrlShortener.Application.UseCases.ShortLinks.Commands.CreateLink
         {
             string alias;
 
-            var normalizedUrl = _urlShortenerService.NormalizeUrl(request.Link);
+            _urlShortenerService.TryNormalizeUrl(request.Link, out var normalizedUrl);
 
             if (!string.IsNullOrEmpty(request.SuggestedAlias))
             {
@@ -75,7 +75,7 @@ namespace UrlShortener.Application.UseCases.ShortLinks.Commands.CreateLink
 
             for (var i = 0; i < COUNT_OF_SHORT_LINK_RETRY; i++)
             {
-                if (!_urlShortenerService.TryShortUrl(normalizedUrl, out var alias, salt))
+                if (!_urlShortenerService.TryShortUrl(normalizedUrl, out var alias, salt: salt))
                     throw new UriFormatException("Unable to short this url");
 
                 if (!await IsAliasExists(alias, cancellationToken))

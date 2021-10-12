@@ -22,7 +22,7 @@ namespace UrlShortener.Application.UnitTests
         {
             // Assign
             var encodedUrl = WebUtility.UrlEncode(url);
-            var normalizedUrl = _urlShortenerService.NormalizeUrl(encodedUrl);
+            _urlShortenerService.TryNormalizeUrl(encodedUrl, out var normalizedUrl);
 
             // Act
             var isValidUrl = _urlShortenerService.IsValidUrl(encodedUrl);
@@ -41,7 +41,7 @@ namespace UrlShortener.Application.UnitTests
         {
             // Assign
             var encodedUrl = WebUtility.UrlEncode(url);
-            var normalizedUrl = _urlShortenerService.NormalizeUrl(encodedUrl);
+            _urlShortenerService.TryNormalizeUrl(encodedUrl, out var normalizedUrl);
 
             // Act
             var isValidUrl = _urlShortenerService.IsValidUrl(encodedUrl);
