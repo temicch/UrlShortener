@@ -1,4 +1,3 @@
-# UrlShortener
 <img alt="Logo" src="img/banner.svg" />  
 
 Web application for shortening links using **[ASP.NET Core][1]**. For the frontend, Blazor is used with the **[Ant Design of Blazor][2]** UI framework  
