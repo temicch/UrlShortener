@@ -1,4 +1,6 @@
-﻿namespace UrlShortener.Application.Interfaces.Services
+﻿using UrlShortener.Application.Interfaces.Common;
+
+namespace UrlShortener.Application.Interfaces.Services
 {
     /// <summary>
     ///     Represents service for shortening URL
@@ -10,25 +12,28 @@
         /// </summary>
         /// <param name="encodedUrl">Encoded url</param>
         /// <param name="alias">Alias of shorted url or <see langword="null" /></param>
+        /// <param name="aliasLength">Alias length</param>
         /// <param name="salt">Encoding salt used for alias formation</param>
         /// <returns>
         ///     <see langword="true" /> if URL can be shorted, <see langword="false" /> otherwise
         /// </returns>
-        public bool TryShortUrl(string encodedUrl, out string alias, string salt = "");
+        public bool TryShortUrl(string encodedUrl, out string alias,
+            int aliasLength = AppConstants.ALIAS_DEFAULT_LENGTH, string salt = "");
 
         /// <summary>
-        ///     Normalize encoded URL string
+        ///     Normalize encoded URL string if it's correct URL
         /// </summary>
         /// <param name="encodedUrl">Encoded URL</param>
-        /// <returns>Normalized URL or <see langword="null" /> if normalization failed</returns>
-        public string NormalizeUrl(string encodedUrl);
+        /// <param name="normalizedUrl">Normalized URL or <see langword="null" /> if normalization failed</param>
+        /// <returns><see langword="true" /> if normalize was successfull, <see langword="false" /> otherwise</returns>
+        public bool TryNormalizeUrl(string encodedUrl, out string normalizedUrl);
 
         /// <summary>
         ///     <para>
         ///         URL validation
         ///     </para>
         ///     <para>
-        ///         It use <see cref="NormalizeUrl(string)" /> for input encoded url
+        ///         It use <see cref="TryNormalizeUrl(string)" /> for input encoded url
         ///     </para>
         /// </summary>
         /// <param name="encodedUrl"></param>

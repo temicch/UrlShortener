@@ -113,6 +113,22 @@ namespace UrlShortener.WebUI.IntegrationTests
             await result.Should().ThrowAsync<ValidationException>();
         }
 
+        [Fact]
+        public async Task CreateLink_WithExistsAlias_ReturnsFailure()
+        {
+            // Assign
+            var link = EntitiesFactory.GetValidShortLinks().ElementAt(0);
+            await _dbContext.ShortLinks.AddAsync(link);
+            await _dbContext.SaveChangesAsync(default);
+
+            // Act
+            var result = await _controller.CreateLink(new CreateLinkRequest(WebUtility.UrlEncode(link.Link),
+                link.Alias));
+
+            // Assert
+            result.Should().BeOfType<BadRequestObjectResult>();
+        }
+
         public override void Dispose()
         {
             _controller.Dispose();
