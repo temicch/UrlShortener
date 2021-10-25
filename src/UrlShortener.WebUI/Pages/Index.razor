@@ -94,9 +94,7 @@
         {
             isProcess = true;
 
-            await Task.Delay(1);
-
-            var request = await Mediator.Send(Mapper.Map<CreateLinkRequest>(Model));
+            var request = await Task.Run(() => Mediator.Send(Mapper.Map<CreateLinkRequest>(Model)));
 
             if (request.IsFailure)
             {

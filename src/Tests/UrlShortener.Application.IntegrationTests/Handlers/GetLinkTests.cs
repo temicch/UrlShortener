@@ -18,7 +18,7 @@ namespace UrlShortener.Application.IntegrationTests.Handlers
         }
 
         [Fact]
-        public async Task GetLink_CreateClickEntity()
+        public async Task GetLink_Create_ClickEntity()
         {
             // Assign
             var linkClicksBefore = _dbContext.LinkClicks.Count();
