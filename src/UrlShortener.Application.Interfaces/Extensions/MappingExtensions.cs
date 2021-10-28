@@ -1,6 +1,6 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Reflection;
+using System.Runtime.Serialization;
 using AutoMapper;
 using UrlShortener.Application.Interfaces.Mapping;
 
@@ -18,8 +18,9 @@ namespace UrlShortener.Application.Interfaces.Extensions
 
             foreach (var mappedType in mappedTypes)
             {
-                var instance = Activator.CreateInstance(mappedType);
-
+                // We can use CreateInstance, but this require to be an empty constructor that not so good decision
+                // var instance = Activator.CreateInstance(mappedType);
+                var instance = FormatterServices.GetUninitializedObject(mappedType);
                 var mappingInterfaces = mappedType
                     .GetInterfaces()
                     .Where(x => x.Name.Contains(nameof(IMapTo<object>)) ||

@@ -3,10 +3,7 @@ using UrlShortener.Domain.Entities;
 
 namespace UrlShortener.Application.UseCases.ShortLinks.Commands.CreateLink
 {
-    public class CreateLinkResponse : IMapFrom<ShortLink>
+    public record CreateLinkResponse(string Id, string Alias, string Link) : IMapFrom<ShortLink>
     {
-        public string Id { get; set; }
-        public string Alias { get; set; }
-        public string Link { get; set; }
     }
 }

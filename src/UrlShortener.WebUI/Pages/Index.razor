@@ -94,9 +94,7 @@
         {
             isProcess = true;
 
-            await Task.Delay(1);
-
-            var request = await Mediator.Send(Mapper.Map<CreateLinkRequest>(Model));
+            var request = await Task.Run(() => Mediator.Send(Model.ToRequest()));
 
             if (request.IsFailure)
             {
@@ -106,9 +104,10 @@
                 return;
             }
 
-            shortResult = request.Value;
-
-            shortResult.Alias = NavigationManager.ToAbsoluteUri($"s/{shortResult.Alias}").ToString();
+            shortResult = request.Value with 
+            { 
+                Alias = NavigationManager.ToAbsoluteUri($"s/{request.Value.Alias}").ToString() 
+                };
         }
         catch (ValidationException exception)
         {

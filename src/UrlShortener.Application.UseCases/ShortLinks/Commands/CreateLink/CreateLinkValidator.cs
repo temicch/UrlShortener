@@ -8,7 +8,7 @@ namespace UrlShortener.Application.UseCases.ShortLinks.Commands.CreateLink
     {
         public CreateLinkValidator(IUrlShortenerService urlShortenerService)
         {
-            Transform(x => x.Link, y => y?.Trim())
+            Transform(x => x.EncodedUrl, y => y?.Trim())
                 .CorrectUrl(urlShortenerService);
 
             When(x => !string.IsNullOrEmpty(x.SuggestedAlias?.Trim()), () =>

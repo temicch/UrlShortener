@@ -8,15 +8,11 @@ namespace UrlShortener.Application.Interfaces.Paginated
     /// <typeparam name="TResponse">
     ///     <see cref="PaginatedList{TResponse}"> type
     /// </typeparam>
-    public abstract class PaginatedRequest<TResponse> : IRequest<PaginatedList<TResponse>>
+    public abstract record PaginatedRequest<TResponse>(int PageIndex = 0, int PageSize = 20) :
+        IRequest<PaginatedList<TResponse>>
     {
-        protected PaginatedRequest(int pageIndex = 0, int pageSize = 20)
+        protected PaginatedRequest() : this(0)
         {
-            PageSize = pageSize;
-            PageIndex = pageIndex;
         }
-
-        public virtual int PageSize { get; set; } = 20;
-        public virtual int PageIndex { get; set; }
     }
 }
