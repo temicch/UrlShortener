@@ -76,7 +76,7 @@ namespace UrlShortener.WebUI.IntegrationTests
             var dbContextLength = await _dbContext.ShortLinks.CountAsync();
 
             // Act
-            var response = await _controller.GetLinks(new GetLinksRequest(pageSize: linksCount));
+            var response = await _controller.GetLinks(new GetLinksRequest(0, linksCount));
 
             // Assert
             dbContextLength.Should().BePositive().And.Be(linksCount);

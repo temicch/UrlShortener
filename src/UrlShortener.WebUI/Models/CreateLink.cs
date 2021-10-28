@@ -1,26 +1,20 @@
 ﻿using System.Linq;
-using System.Net;
-using AutoMapper;
 using FluentValidation;
 using UrlShortener.Application.Interfaces.Common;
-using UrlShortener.Application.Interfaces.Mapping;
 using UrlShortener.Application.Interfaces.Services;
 using UrlShortener.Application.UseCases.ShortLinks.Commands.CreateLink;
 
 namespace UrlShortener.WebUI.Models
 {
-    public class CreateLink : IMapTo<CreateLinkRequest>
+    public class CreateLink
     {
         public string Link { get; set; }
         public string SuggestedAlias { get; set; }
         public bool IsAliasUsed { get; set; }
 
-        public void Mapping(Profile profile)
+        public CreateLinkRequest ToRequest()
         {
-            profile.CreateMap<CreateLink, CreateLinkRequest>()
-                .ForMember(x => x.SuggestedAlias,
-                    y => y.MapFrom(x => x.IsAliasUsed ? x.SuggestedAlias : string.Empty))
-                .ForMember(x => x.Link, y => y.MapFrom(z => WebUtility.UrlEncode(z.Link)));
+            return new CreateLinkRequest(Link, IsAliasUsed ? SuggestedAlias : string.Empty);
         }
     }
 

@@ -6,14 +6,12 @@ using UrlShortener.Domain.Entities;
 
 namespace UrlShortener.Application.UseCases.LinkClicks.Queries.GetClicksStatistic
 {
-    public class GetClicksResponse : IMapFrom<IGrouping<ShortLink, LinkClick>>
+    public record GetClicksResponse(string LinkId, DateTime LinkCreatedAt, string Alias, string Link,
+        int ClickCount, DateTime LastClickAt) : IMapFrom<IGrouping<ShortLink, LinkClick>>
     {
-        public string LinkId { get; set; }
-        public DateTime LinkCreatedAt { get; set; }
-        public string Alias { get; set; }
-        public string Link { get; set; }
-        public int ClickCount { get; set; }
-        public DateTime LastClickAt { get; set; }
+        protected GetClicksResponse() : this(default, default, default, default, default, default)
+        {
+        }
 
         public void Mapping(Profile profile)
         {
