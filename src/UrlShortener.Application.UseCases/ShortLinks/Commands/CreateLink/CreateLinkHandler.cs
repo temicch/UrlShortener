@@ -38,7 +38,7 @@ namespace UrlShortener.Application.UseCases.ShortLinks.Commands.CreateLink
         {
             string alias;
 
-            _urlShortenerService.TryNormalizeUrl(request.Link, out var normalizedUrl);
+            _urlShortenerService.TryNormalizeUrl(request.EncodedUrl, out var normalizedUrl);
 
             if (!string.IsNullOrEmpty(request.SuggestedAlias))
             {

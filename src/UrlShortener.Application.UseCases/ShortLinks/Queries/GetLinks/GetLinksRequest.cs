@@ -6,13 +6,9 @@ namespace UrlShortener.Application.UseCases.ShortLinks.Queries.GetLinks
     ///     Represents request for receive <see cref="PaginatedList{T}" />
     ///     of <see cref="GetLinksResponse" />'s
     /// </summary>
-    public class GetLinksRequest : PaginatedRequest<GetLinksResponse>
+    public record GetLinksRequest : PaginatedRequest<GetLinksResponse>
     {
-        public GetLinksRequest(int pageIndex = 0, int pageSize = 20) : base(pageIndex, pageSize)
-        {
-        }
-
-        public GetLinksRequest()
+        public GetLinksRequest(int PageIndex = 0, int PageSize = 20) : base(PageIndex, PageSize)
         {
         }
     }
