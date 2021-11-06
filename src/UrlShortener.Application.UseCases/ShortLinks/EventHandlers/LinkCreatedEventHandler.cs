@@ -18,9 +18,10 @@ namespace UrlShortener.Application.UseCases.ShortLinks.EventHandlers
         public Task Handle(LinkCreatedEvent @event, CancellationToken cancellationToken = default)
         {
             if (@event.Payload != null)
-                _logger.LogInformation($"Alias '{@event.Payload.Alias}' for link '{@event.Payload.Link}' created");
+                _logger.LogInformation("Alias {Alias} created for link {Link}", @event.Payload.Alias,
+                    @event.Payload.Link);
             else
-                _logger.LogWarning($"Null link provided at {@event.CreatedAt}");
+                _logger.LogWarning("Null link provided at {Time}", @event.CreatedAt);
 
             return Task.CompletedTask;
         }
