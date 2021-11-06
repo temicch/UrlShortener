@@ -8,8 +8,5 @@ namespace UrlShortener.Application.UseCases.ShortLinks.Queries.GetLinks
     /// </summary>
     public record GetLinksRequest : PaginatedRequest<GetLinksResponse>
     {
-        public GetLinksRequest(int PageIndex = 0, int PageSize = 20) : base(PageIndex, PageSize)
-        {
-        }
     }
 }
