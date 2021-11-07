@@ -1,16 +1,18 @@
-using System;
-using System.Linq;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using UrlShortener.Application.Interfaces;
+using System.Data.Common;
+using System.Linq;
 using UrlShortener.Infrastructure;
 
 namespace UrlShortener.Common.Tests.Common
 {
     public class TestFixture<TStartup> : WebApplicationFactory<TStartup> where TStartup : class
     {
+        protected DbConnection _connection;
+
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
             builder
@@ -23,41 +25,25 @@ namespace UrlShortener.Common.Tests.Common
                     if (descriptor != null)
                         services.Remove(descriptor);
 
+                    _connection = new SqliteConnection("datasource=:memory:");
+                    _connection.Open();
+
                     services.AddDbContext<ApplicationDbContext>(options =>
-                        options.UseSqlite("DataSource=test_db.db")
+                        options.UseSqlite(_connection)
                     );
 
                     var sp = services.BuildServiceProvider();
 
                     using var scope = sp.CreateScope();
-                    var dbContext = (DbContext)scope.ServiceProvider
-                        .GetRequiredService<IDbContext>();
+                    var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
-                    try
-                    {
-                        dbContext.Database.Migrate();
-                    }
-                    catch (Exception)
-                    {
-                    }
+                    dbContext.Database.EnsureCreated();
                 });
         }
 
         protected override void Dispose(bool disposing)
         {
-            using (var scope = Server.Services.CreateScope())
-            {
-                var dbContext = (DbContext)scope.ServiceProvider
-                    .GetRequiredService<IDbContext>();
-                try
-                {
-                    dbContext.Database.EnsureDeleted();
-                }
-                catch (Exception)
-                {
-                }
-            }
-
+            _connection.Dispose();
             base.Dispose(disposing);
         }
     }
