@@ -1,7 +1,16 @@
-<img alt="Logo" src="img/banner.svg" />  
+<h1 align="center">
+ <p align="center">
+   <img alt="Logo" src="img/banner.svg" />
+ </p>
+ </h1>
 
-Web application for shortening links using **[ASP.NET Core][1]**. For the frontend, Blazor is used with the **[Ant Design of Blazor][2]** UI framework  
-
+<div align="center">
+ 
+ Web application for shortening links using **[ASP.NET Core][1]**. For the frontend, Blazor is used with the **[Ant Design of Blazor][2]** UI framework  
+ 
+ ![](https://img.shields.io/github/workflow/status/temicch/UrlShortener/.NET/master?style=flat-square)
+</div>
+ 
 ## :blue_book: Description
 
 <img alt="Preview" align="right" src="img/preview-0.png" width="40%" />
