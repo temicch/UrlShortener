@@ -14,75 +14,74 @@ using UrlShortener.Application.UseCases;
 using UrlShortener.Infrastructure;
 using UrlShortener.WebUI.Middleware;
 
-namespace UrlShortener.WebUI
+namespace UrlShortener.WebUI;
+
+public class Startup
 {
-    public class Startup
+    public Startup(IConfiguration configuration)
     {
-        public Startup(IConfiguration configuration)
+        Configuration = configuration;
+    }
+
+    public IConfiguration Configuration { get; }
+
+    public void ConfigureServices(IServiceCollection services)
+    {
+        services.AddInfrastructure(Configuration);
+        services.AddApplication();
+        services.AddUseCases();
+
+        services.AddAutoMapper(Assembly.GetExecutingAssembly());
+
+        services.AddControllers()
+            .AddFluentValidation();
+
+        services.AddSwaggerGen(c =>
         {
-            Configuration = configuration;
+            c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
+
+            var filePath = Path.Combine(AppContext.BaseDirectory, "SwaggerHelper.xml");
+            if (File.Exists(filePath))
+                c.IncludeXmlComments(filePath);
+        });
+        services.AddFluentValidationRulesToSwagger();
+
+        services.AddWebOptimizer(pipeline => { pipeline.CompileScssFiles(null, "css/**/*.*css"); });
+
+        services.AddRazorPages();
+        services.AddServerSideBlazor();
+
+        services.AddAntDesign();
+    }
+
+    public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+    {
+        if (env.IsDevelopment())
+        {
+            app.UseDeveloperExceptionPage();
+            app.UseSwagger();
+            app.UseSwaggerUI(c => c.SwaggerEndpoint("v1/swagger.json", "My API V1"));
+        }
+        else
+        {
+            app.UseExceptionHandler("/Error");
+            app.UseHsts();
         }
 
-        public IConfiguration Configuration { get; }
+        app.UseMiddleware<ExceptionHandlerMiddleware>();
 
-        public void ConfigureServices(IServiceCollection services)
+        app.UseHttpsRedirection();
+        app.UseWebOptimizer();
+
+        app.UseStaticFiles();
+
+        app.UseRouting();
+
+        app.UseEndpoints(endpoints =>
         {
-            services.AddInfrastructure(Configuration);
-            services.AddApplication();
-            services.AddUseCases();
-
-            services.AddAutoMapper(Assembly.GetExecutingAssembly());
-
-            services.AddControllers()
-                .AddFluentValidation();
-
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
-
-                var filePath = Path.Combine(AppContext.BaseDirectory, "SwaggerHelper.xml");
-                if (File.Exists(filePath))
-                    c.IncludeXmlComments(filePath);
-            });
-            services.AddFluentValidationRulesToSwagger();
-
-            services.AddWebOptimizer(pipeline => { pipeline.CompileScssFiles(null, "css/**/*.*css"); });
-
-            services.AddRazorPages();
-            services.AddServerSideBlazor();
-
-            services.AddAntDesign();
-        }
-
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
-        {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-                app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("v1/swagger.json", "My API V1"));
-            }
-            else
-            {
-                app.UseExceptionHandler("/Error");
-                app.UseHsts();
-            }
-
-            app.UseMiddleware<ExceptionHandlerMiddleware>();
-
-            app.UseHttpsRedirection();
-            app.UseWebOptimizer();
-
-            app.UseStaticFiles();
-
-            app.UseRouting();
-
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-                endpoints.MapBlazorHub();
-                endpoints.MapFallbackToPage("/_Host");
-            });
-        }
+            endpoints.MapControllers();
+            endpoints.MapBlazorHub();
+            endpoints.MapFallbackToPage("/_Host");
+        });
     }
 }

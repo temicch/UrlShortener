@@ -7,36 +7,35 @@ using UrlShortener.Application.Interfaces;
 using UrlShortener.Application.Interfaces.Services;
 using UrlShortener.Domain.Entities;
 
-namespace UrlShortener.Infrastructure
+namespace UrlShortener.Infrastructure;
+
+public class ApplicationDbContext : DbContext, IDbContext
 {
-    public class ApplicationDbContext : DbContext, IDbContext
+    private readonly IDateTimeService _dateTime;
+
+    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> dbContextOptions,
+        IDateTimeService dateTime)
+        : base(dbContextOptions)
     {
-        private readonly IDateTimeService _dateTime;
+        _dateTime = dateTime;
+    }
 
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> dbContextOptions,
-            IDateTimeService dateTime)
-            : base(dbContextOptions)
-        {
-            _dateTime = dateTime;
-        }
+    public DbSet<ShortLink> ShortLinks { get; set; }
+    public DbSet<LinkClick> LinkClicks { get; set; }
 
-        public DbSet<ShortLink> ShortLinks { get; set; }
-        public DbSet<LinkClick> LinkClicks { get; set; }
+    public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+    {
+        foreach (var entry in ChangeTracker.Entries<AuditableEntity>()
+            .Where(x => x.State == EntityState.Added))
+            entry.Entity.CreatedAt = entry.Entity.CreatedAt == default ? _dateTime.Now : entry.Entity.CreatedAt;
 
-        public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
-        {
-            foreach (var entry in ChangeTracker.Entries<AuditableEntity>()
-                .Where(x => x.State == EntityState.Added))
-                entry.Entity.CreatedAt = entry.Entity.CreatedAt == default ? _dateTime.Now : entry.Entity.CreatedAt;
+        return await base.SaveChangesAsync(cancellationToken);
+    }
 
-            return await base.SaveChangesAsync(cancellationToken);
-        }
+    protected override void OnModelCreating(ModelBuilder builder)
+    {
+        base.OnModelCreating(builder);
 
-        protected override void OnModelCreating(ModelBuilder builder)
-        {
-            base.OnModelCreating(builder);
-
-            builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
-        }
+        builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
     }
 }

@@ -1,7 +1,6 @@
-﻿namespace UrlShortener.Domain.Common
+﻿namespace UrlShortener.Domain.Common;
+
+public interface IEntity
 {
-    public interface IEntity
-    {
-        public string Id { get; set; }
-    }
+    public string Id { get; set; }
 }

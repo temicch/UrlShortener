@@ -8,52 +8,51 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.Extensions.Logging;
 using UrlShortener.WebUI.Extensions;
 
-namespace UrlShortener.WebUI.Middleware
+namespace UrlShortener.WebUI.Middleware;
+
+public class ExceptionHandlerMiddleware
 {
-    public class ExceptionHandlerMiddleware
+    private readonly ILogger<ExceptionHandlerMiddleware> _logger;
+    private readonly RequestDelegate _next;
+    private readonly ProblemDetailsFactory _problemDetailsFactory;
+
+    public ExceptionHandlerMiddleware(RequestDelegate next,
+        ILogger<ExceptionHandlerMiddleware> logger,
+        ProblemDetailsFactory problemDetailsFactory)
     {
-        private readonly ILogger<ExceptionHandlerMiddleware> _logger;
-        private readonly RequestDelegate _next;
-        private readonly ProblemDetailsFactory _problemDetailsFactory;
+        _next = next;
+        _logger = logger;
+        _problemDetailsFactory = problemDetailsFactory;
+    }
 
-        public ExceptionHandlerMiddleware(RequestDelegate next,
-            ILogger<ExceptionHandlerMiddleware> logger,
-            ProblemDetailsFactory problemDetailsFactory)
+    public async Task Invoke(HttpContext context)
+    {
+        try
         {
-            _next = next;
-            _logger = logger;
-            _problemDetailsFactory = problemDetailsFactory;
+            await _next.Invoke(context);
         }
-
-        public async Task Invoke(HttpContext context)
+        catch (Exception exception) when (!context.Response.HasStarted)
         {
-            try
-            {
-                await _next.Invoke(context);
-            }
-            catch (Exception exception) when (!context.Response.HasStarted)
-            {
-                var code = HttpStatusCode.InternalServerError;
-                object result = null;
+            var code = HttpStatusCode.InternalServerError;
+            object result = null;
 
-                switch (exception)
-                {
-                    case ValidationException ex:
-                        var modelState = new ModelStateDictionary();
-                        modelState.AddModelErrors(ex);
-                        code = HttpStatusCode.BadRequest;
-                        result = _problemDetailsFactory
-                            .CreateValidationProblemDetails(context, modelState);
-                        break;
-                    default:
-                        _logger.LogError(exception, exception.Message);
-                        break;
-                }
-
-                context.Response.ContentType = "application/json";
-                context.Response.StatusCode = (int)code;
-                await context.Response.WriteAsJsonAsync(result);
+            switch (exception)
+            {
+                case ValidationException ex:
+                    var modelState = new ModelStateDictionary();
+                    modelState.AddModelErrors(ex);
+                    code = HttpStatusCode.BadRequest;
+                    result = _problemDetailsFactory
+                        .CreateValidationProblemDetails(context, modelState);
+                    break;
+                default:
+                    _logger.LogError(exception, exception.Message);
+                    break;
             }
+
+            context.Response.ContentType = "application/json";
+            context.Response.StatusCode = (int)code;
+            await context.Response.WriteAsJsonAsync(result);
         }
     }
 }

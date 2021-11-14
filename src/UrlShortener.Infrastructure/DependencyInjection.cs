@@ -4,25 +4,24 @@ using Microsoft.Extensions.DependencyInjection;
 using UrlShortener.Application.Interfaces;
 using UrlShortener.Application.Interfaces.Services;
 
-namespace UrlShortener.Infrastructure
+namespace UrlShortener.Infrastructure;
+
+public static class DependencyInjection
 {
-    public static class DependencyInjection
+    /// <summary>
+    ///     Add services for <c>Infrastructure layer</c> working
+    /// </summary>
+    public static IServiceCollection AddInfrastructure(this IServiceCollection services,
+        IConfiguration Configuration)
     {
-        /// <summary>
-        ///     Add services for <c>Infrastructure layer</c> working
-        /// </summary>
-        public static IServiceCollection AddInfrastructure(this IServiceCollection services,
-            IConfiguration Configuration)
-        {
-            services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlite(
-                    Configuration.GetConnectionString("DefaultConnection"))
-            );
+        services.AddDbContext<ApplicationDbContext>(options =>
+            options.UseSqlite(
+                Configuration.GetConnectionString("DefaultConnection"))
+        );
 
-            services.AddScoped<IDbContext, ApplicationDbContext>();
-            services.AddTransient<IDateTimeService, DateTimeService>();
+        services.AddScoped<IDbContext, ApplicationDbContext>();
+        services.AddTransient<IDateTimeService, DateTimeService>();
 
-            return services;
-        }
+        return services;
     }
 }
