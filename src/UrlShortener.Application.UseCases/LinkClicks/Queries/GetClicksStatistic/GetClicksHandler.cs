@@ -1,33 +1,37 @@
 ﻿using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using AutoMapper;
-using AutoMapper.QueryableExtensions;
 using UrlShortener.Application.Interfaces;
 using UrlShortener.Application.Interfaces.Paginated;
-using UrlShortener.Domain.Entities;
 
-namespace UrlShortener.Application.UseCases.LinkClicks.Queries.GetClicksStatistic
+namespace UrlShortener.Application.UseCases.LinkClicks.Queries.GetClicksStatistic;
+
+public class GetClicksHandler : IPaginatedRequestHandler<GetClicksRequest, GetClicksResponse>
 {
-    public class GetClicksHandler : IPaginatedRequestHandler<GetClicksRequest, GetClicksResponse>
+    private readonly IDbContext _dbContext;
+
+    public GetClicksHandler(IDbContext dbContext)
     {
-        private readonly IConfigurationProvider _configurationProvider;
-        private readonly IDbContext _dbContext;
+        _dbContext = dbContext;
+    }
 
-        public GetClicksHandler(IDbContext dbContext, IConfigurationProvider configurationProvider)
-        {
-            _dbContext = dbContext;
-            _configurationProvider = configurationProvider;
-        }
-
-        public async Task<PaginatedList<GetClicksResponse>> Handle(GetClicksRequest request,
-            CancellationToken cancellationToken)
-        {
-            return await _dbContext.LinkClicks
-                .GroupBy(x => new ShortLink(x.Link.Id, x.Link.Link, x.Link.Alias, x.Link.CreatedAt))
-                .OrderByDescending(x => x.Count())
-                .ProjectTo<GetClicksResponse>(_configurationProvider)
-                .ToPaginatedListAsync(request.PageIndex, request.PageSize, cancellationToken);
-        }
+    public async Task<PaginatedList<GetClicksResponse>> Handle(GetClicksRequest request,
+        CancellationToken cancellationToken)
+    {
+        return await _dbContext.LinkClicks
+            .GroupBy(x => new { x.Link.Id, x.Link.Link, x.Link.Alias, x.Link.CreatedAt })
+            .OrderByDescending(x => x.Count())
+            // Here may be ProjectTo from AutoMapper, but for some reason GroupBy(class) not working well in
+            // ef core 6, so configuring mapper was difficult
+            .Select(x => new GetClicksResponse()
+            {
+                LinkId = x.Key.Id,
+                LinkCreatedAt = x.Key.CreatedAt,
+                Link = x.Key.Link,
+                Alias = x.Key.Alias,
+                ClickCount = x.Count(),
+                LastClickAt = x.Max(z => z.CreatedAt)
+            })
+            .ToPaginatedListAsync(request.PageIndex, request.PageSize, cancellationToken);
     }
 }

@@ -7,34 +7,33 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using UrlShortener.Infrastructure;
 
-namespace UrlShortener.WebUI.Extensions
+namespace UrlShortener.WebUI.Extensions;
+
+public static class HostExtensions
 {
-    public static class HostExtensions
+    public static async Task<IHost> MigrateDatabaseAsync(this IHost host,
+        CancellationToken cancellationToken = default)
     {
-        public static async Task<IHost> MigrateDatabaseAsync(this IHost host,
-            CancellationToken cancellationToken = default)
+        using var scope = host.Services.CreateScope();
+
+        var services = scope.ServiceProvider;
+
+        try
         {
-            using var scope = host.Services.CreateScope();
+            var context = services.GetRequiredService<ApplicationDbContext>();
 
-            var services = scope.ServiceProvider;
-
-            try
-            {
-                var context = services.GetRequiredService<ApplicationDbContext>();
-
-                if (context.Database.IsSqlite())
-                    await context.Database.MigrateAsync(cancellationToken);
-            }
-            catch (Exception ex)
-            {
-                var logger = scope.ServiceProvider.GetRequiredService<ILogger<IHost>>();
-
-                logger.LogError(ex, "An error occurred while migrating or seeding the database.");
-
-                throw;
-            }
-
-            return host;
+            if (context.Database.IsSqlite())
+                await context.Database.MigrateAsync(cancellationToken);
         }
+        catch (Exception ex)
+        {
+            var logger = scope.ServiceProvider.GetRequiredService<ILogger<IHost>>();
+
+            logger.LogError(ex, "An error occurred while migrating or seeding the database.");
+
+            throw;
+        }
+
+        return host;
     }
 }

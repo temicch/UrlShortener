@@ -367,3 +367,5 @@ FodyWeavers.xsd
 **/SwaggerHelper.xml
 
 **/url_shorter.db
+/src/UrlShortener.WebUI/url_shorter.db-wal
+/src/UrlShortener.WebUI/url_shorter.db-shm

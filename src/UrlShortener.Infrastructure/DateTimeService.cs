@@ -1,10 +1,9 @@
 ﻿using System;
 using UrlShortener.Application.Interfaces.Services;
 
-namespace UrlShortener.Infrastructure
+namespace UrlShortener.Infrastructure;
+
+public class DateTimeService : IDateTimeService
 {
-    public class DateTimeService : IDateTimeService
-    {
-        public DateTime Now => DateTime.Now;
-    }
+    public DateTime Now => DateTime.Now;
 }
