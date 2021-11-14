@@ -2,13 +2,12 @@
 using AutoMapper;
 using UrlShortener.Application.Interfaces.Extensions;
 
-namespace UrlShortener.WebUI
+namespace UrlShortener.WebUI;
+
+public class MappingProfile : Profile
 {
-    public class MappingProfile : Profile
+    public MappingProfile()
     {
-        public MappingProfile()
-        {
-            this.ApplyMappingsFromAssembly(Assembly.GetExecutingAssembly());
-        }
+        this.ApplyMappingsFromAssembly(Assembly.GetExecutingAssembly());
     }
 }

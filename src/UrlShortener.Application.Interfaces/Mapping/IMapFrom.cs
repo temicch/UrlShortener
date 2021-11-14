@@ -1,23 +1,22 @@
 ﻿using AutoMapper;
 
-namespace UrlShortener.Application.Interfaces.Mapping
+namespace UrlShortener.Application.Interfaces.Mapping;
+
+/// <summary>
+///     <para>
+///         Mapping from <typeparamref name="TFrom" /> to this type
+///     </para>
+/// </summary>
+public interface IMapFrom<TFrom>
 {
     /// <summary>
-    ///     <para>
-    ///         Mapping from <typeparamref name="TFrom" /> to this type
-    ///     </para>
+    ///     <inheritdoc cref="AutoMapper.Configuration.IProfileConfiguration" />
     /// </summary>
-    public interface IMapFrom<TFrom>
+    /// <param name="profile">
+    ///     <inheritdoc cref="Profile" />
+    /// </param>
+    void Mapping(Profile profile)
     {
-        /// <summary>
-        ///     <inheritdoc cref="AutoMapper.Configuration.IProfileConfiguration" />
-        /// </summary>
-        /// <param name="profile">
-        ///     <inheritdoc cref="Profile" />
-        /// </param>
-        void Mapping(Profile profile)
-        {
-            profile.CreateMap(typeof(TFrom), GetType());
-        }
+        profile.CreateMap(typeof(TFrom), GetType());
     }
 }

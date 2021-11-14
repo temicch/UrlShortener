@@ -1,15 +1,14 @@
 ﻿using System;
 
-namespace UrlShortener.Application.Interfaces.Services
+namespace UrlShortener.Application.Interfaces.Services;
+
+/// <summary>
+///     Represents service for <see cref="DateTime.Now" />
+/// </summary>
+public interface IDateTimeService
 {
     /// <summary>
-    ///     Represents service for <see cref="DateTime.Now" />
+    ///     Current time
     /// </summary>
-    public interface IDateTimeService
-    {
-        /// <summary>
-        ///     Current time
-        /// </summary>
-        DateTime Now { get; }
-    }
+    DateTime Now { get; }
 }

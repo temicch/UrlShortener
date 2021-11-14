@@ -98,16 +98,14 @@
 
             if (request.IsFailure)
             {
-    // Do not need to wait
+                // Do not need to wait
 #pragma warning disable CS4014
                 message.Error(request.Error);
                 return;
             }
 
-            shortResult = request.Value with 
-            { 
-                Alias = NavigationManager.ToAbsoluteUri($"s/{request.Value.Alias}").ToString() 
-                };
+            shortResult = request.Value;
+            shortResult.Alias = NavigationManager.ToAbsoluteUri($"s/{request.Value.Alias}").ToString();
         }
         catch (ValidationException exception)
         {

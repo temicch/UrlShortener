@@ -9,34 +9,33 @@ using UrlShortener.Common.Tests.TheoryData.Urls;
 using UrlShortener.WebUI;
 using Xunit;
 
-namespace UrlShortener.Application.IntegrationTests.Handlers
+namespace UrlShortener.Application.IntegrationTests.Handlers;
+
+public class GetLinkTests : IntegrationTestBase
 {
-    public class GetLinkTests : IntegrationTestBase
+    public GetLinkTests(TestFixture<Startup> testFixture) : base(testFixture)
     {
-        public GetLinkTests(TestFixture<Startup> testFixture) : base(testFixture)
-        {
-        }
+    }
 
-        [Fact]
-        public async Task GetLink_Create_ClickEntity()
-        {
-            // Assign
-            var linkClicksBefore = _dbContext.LinkClicks.Count();
-            var link = await _mediator
-                .Send(new CreateLinkRequest(new ValidUrls().First()[0].As<string>()));
+    [Fact]
+    public async Task GetLink_Create_ClickEntity()
+    {
+        // Assign
+        var linkClicksBefore = _dbContext.LinkClicks.Count();
+        var link = await _mediator
+            .Send(new CreateLinkRequest(new ValidUrls().First()[0].As<string>()));
 
-            // Act
-            var result = await _mediator.Send(new GetLinkRequest(link.Value.Alias));
-            var linkClick = await _dbContext.LinkClicks
-                .Where(x => x.LinkId == result.Value.Id)
-                .FirstOrDefaultAsync();
-            var linkClicksAfter = await _dbContext.LinkClicks.CountAsync();
+        // Act
+        var result = await _mediator.Send(new GetLinkRequest(link.Value.Alias));
+        var linkClick = await _dbContext.LinkClicks
+            .Where(x => x.LinkId == result.Value.Id)
+            .FirstOrDefaultAsync();
+        var linkClicksAfter = await _dbContext.LinkClicks.CountAsync();
 
-            // Assert
-            result.Should().NotBeNull();
-            linkClick.Should().NotBeNull();
-            linkClicksBefore.Should().Be(0);
-            linkClicksAfter.Should().Be(1);
-        }
+        // Assert
+        result.Should().NotBeNull();
+        linkClick.Should().NotBeNull();
+        linkClicksBefore.Should().Be(0);
+        linkClicksAfter.Should().Be(1);
     }
 }

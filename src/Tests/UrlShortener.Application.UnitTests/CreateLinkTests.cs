@@ -17,64 +17,63 @@ using UrlShortener.Domain.Entities;
 using UrlShortener.Domain.Events;
 using Xunit;
 
-namespace UrlShortener.Application.UnitTests
+namespace UrlShortener.Application.UnitTests;
+
+public class CreateLinkTests
 {
-    public class CreateLinkTests
+    private readonly Mock<IDbContext> _dbContext;
+    private readonly Mock<IDomainEventService> _domainEventService;
+    private readonly IMapper _mapper;
+    private readonly IUrlShortenerService _urlShortenerService = new UrlShortenerService();
+
+    public CreateLinkTests()
     {
-        private readonly Mock<IDbContext> _dbContext;
-        private readonly Mock<IDomainEventService> _domainEventService;
-        private readonly IMapper _mapper;
-        private readonly IUrlShortenerService _urlShortenerService = new UrlShortenerService();
+        _mapper = new MapperConfiguration(cfg => cfg.AddProfile(new MappingProfile()))
+            .CreateMapper();
+        _dbContext = new Mock<IDbContext>();
+        _domainEventService = new Mock<IDomainEventService>();
+    }
 
-        public CreateLinkTests()
-        {
-            _mapper = new MapperConfiguration(cfg => cfg.AddProfile(new MappingProfile()))
-                .CreateMapper();
-            _dbContext = new Mock<IDbContext>();
-            _domainEventService = new Mock<IDomainEventService>();
-        }
+    [Fact]
+    public async Task CreateLink_WithCorrectParams_Invoke_CreatedEvent()
+    {
+        // Assign
+        var url = new ValidUrls().ToArray()[0][0] as string;
+        var fakeData = Enumerable.Empty<ShortLink>().AsQueryable().BuildMockDbSet();
+        _dbContext.Setup(x => x.ShortLinks).Returns(fakeData.Object);
 
-        [Fact]
-        public async Task CreateLink_WithCorrectParams_Invoke_CreatedEvent()
-        {
-            // Assign
-            var url = new ValidUrls().ToArray()[0][0] as string;
-            var fakeData = Enumerable.Empty<ShortLink>().AsQueryable().BuildMockDbSet();
-            _dbContext.Setup(x => x.ShortLinks).Returns(fakeData.Object);
+        // Act
+        var handler = new CreateLinkHandler(_dbContext.Object,
+            _urlShortenerService,
+            _mapper,
+            _domainEventService.Object);
+        var result = await handler.Handle(new CreateLinkRequest(WebUtility.UrlEncode(url)), default);
 
-            // Act
-            var handler = new CreateLinkHandler(_dbContext.Object,
-                _urlShortenerService,
-                _mapper,
-                _domainEventService.Object);
-            var result = await handler.Handle(new CreateLinkRequest(WebUtility.UrlEncode(url)), default);
+        // Assert
+        _domainEventService.Verify(x => x.PublishAsync(It.IsAny<LinkCreatedEvent>(),
+                It.IsAny<CancellationToken>()),
+            Times.Once);
+    }
 
-            // Assert
-            _domainEventService.Verify(x => x.PublishAsync(It.IsAny<LinkCreatedEvent>(),
-                    It.IsAny<CancellationToken>()),
-                Times.Once);
-        }
+    [Fact]
+    public async Task CreateLink_WithIncorrectParams_NotInvoke_CreatedEvent()
+    {
+        // Assign
+        var url = new InvalidUrls().ToArray()[0][0] as string;
+        var fakeData = Enumerable.Empty<ShortLink>().AsQueryable().BuildMockDbSet();
+        _dbContext.Setup(x => x.ShortLinks).Returns(fakeData.Object);
 
-        [Fact]
-        public async Task CreateLink_WithIncorrectParams_NotInvoke_CreatedEvent()
-        {
-            // Assign
-            var url = new InvalidUrls().ToArray()[0][0] as string;
-            var fakeData = Enumerable.Empty<ShortLink>().AsQueryable().BuildMockDbSet();
-            _dbContext.Setup(x => x.ShortLinks).Returns(fakeData.Object);
+        // Act
+        var handler = new CreateLinkHandler(_dbContext.Object,
+            _urlShortenerService,
+            _mapper,
+            _domainEventService.Object);
+        Func<Task> result = () => handler.Handle(new CreateLinkRequest(WebUtility.UrlEncode(url)), default);
 
-            // Act
-            var handler = new CreateLinkHandler(_dbContext.Object,
-                _urlShortenerService,
-                _mapper,
-                _domainEventService.Object);
-            Func<Task> result = () => handler.Handle(new CreateLinkRequest(WebUtility.UrlEncode(url)), default);
-
-            // Assert
-            await result.Should().ThrowAsync<UriFormatException>();
-            _domainEventService.Verify(x => x.PublishAsync(It.IsAny<LinkCreatedEvent>(),
-                    It.IsAny<CancellationToken>()),
-                Times.Never);
-        }
+        // Assert
+        await result.Should().ThrowAsync<UriFormatException>();
+        _domainEventService.Verify(x => x.PublishAsync(It.IsAny<LinkCreatedEvent>(),
+                It.IsAny<CancellationToken>()),
+            Times.Never);
     }
 }

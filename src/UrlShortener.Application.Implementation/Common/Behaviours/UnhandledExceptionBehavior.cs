@@ -5,36 +5,35 @@ using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
-namespace UrlShortener.Application.Implementation.Common.Behaviours
+namespace UrlShortener.Application.Implementation.Common.Behaviours;
+
+/// <summary>
+///     Behavior for unhandled <see cref="Exception" />
+/// </summary>
+public class UnhandledExceptionBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
 {
-    /// <summary>
-    ///     Behavior for unhandled <see cref="Exception" />
-    /// </summary>
-    public class UnhandledExceptionBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
+    private readonly ILogger<TRequest> _logger;
+
+    public UnhandledExceptionBehavior(ILogger<TRequest> logger)
     {
-        private readonly ILogger<TRequest> _logger;
+        _logger = logger;
+    }
 
-        public UnhandledExceptionBehavior(ILogger<TRequest> logger)
+    public async Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken,
+        RequestHandlerDelegate<TResponse> next)
+    {
+        try
         {
-            _logger = logger;
+            return await next();
         }
-
-        public async Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken,
-            RequestHandlerDelegate<TResponse> next)
+        catch (Exception ex) when (!(ex is ValidationException))
         {
-            try
-            {
-                return await next();
-            }
-            catch (Exception ex) when (!(ex is ValidationException))
-            {
-                var requestName = typeof(TRequest).Name;
+            var requestName = typeof(TRequest).Name;
 
-                _logger.LogError(ex, "Request: Unhandled Exception for Request {Name} {@Request}", requestName,
-                    request);
+            _logger.LogError(ex, "Request: Unhandled Exception for Request {Name} {@Request}", requestName,
+                request);
 
-                throw;
-            }
+            throw;
         }
     }
 }
