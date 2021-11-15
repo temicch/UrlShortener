@@ -1,37 +1,37 @@
-﻿using System.Linq;
+﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using UrlShortener.Application.Interfaces;
 using UrlShortener.Application.Interfaces.Paginated;
+using UrlShortener.Domain.Entities;
 
 namespace UrlShortener.Application.UseCases.LinkClicks.Queries.GetClicksStatistic;
 
 public class GetClicksHandler : IPaginatedRequestHandler<GetClicksRequest, GetClicksResponse>
 {
     private readonly IDbContext _dbContext;
+    private IConfigurationProvider _configurationProvider;
 
-    public GetClicksHandler(IDbContext dbContext)
+    public GetClicksHandler(IDbContext dbContext, IConfigurationProvider configurationProvider)
     {
         _dbContext = dbContext;
+        _configurationProvider = configurationProvider;
     }
 
     public async Task<PaginatedList<GetClicksResponse>> Handle(GetClicksRequest request,
         CancellationToken cancellationToken)
     {
-        return await _dbContext.LinkClicks
-            .GroupBy(x => new { x.Link.Id, x.Link.Link, x.Link.Alias, x.Link.CreatedAt })
-            .OrderByDescending(x => x.Count())
-            // Here may be ProjectTo from AutoMapper, but for some reason GroupBy(class) not working well in
-            // ef core 6, so configuring mapper was difficult
-            .Select(x => new GetClicksResponse()
+        return await _dbContext.LinkClicks.GroupBy(x => new ShortLink
             {
-                LinkId = x.Key.Id,
-                LinkCreatedAt = x.Key.CreatedAt,
-                Link = x.Key.Link,
-                Alias = x.Key.Alias,
-                ClickCount = x.Count(),
-                LastClickAt = x.Max(z => z.CreatedAt)
+                Id = x.Link.Id,
+                Link = x.Link.Link,
+                Alias = x.Link.Alias,
+                CreatedAt = x.Link.CreatedAt
             })
+            .OrderByDescending(x => x.Count())
+            .ProjectTo<GetClicksResponse>(_configurationProvider)
             .ToPaginatedListAsync(request.PageIndex, request.PageSize, cancellationToken);
     }
 }
