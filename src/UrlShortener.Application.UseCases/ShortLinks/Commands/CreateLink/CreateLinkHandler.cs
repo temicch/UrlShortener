@@ -57,7 +57,7 @@ public class CreateLinkHandler : IRequestHandler<CreateLinkRequest, IResult<Crea
             alias = await GenerateAlias(normalizedUrl, cancellationToken);
         }
 
-        var shortLink = new ShortLink(normalizedUrl, alias);
+        var shortLink = new ShortLink { Link = normalizedUrl, Alias = alias };
 
         _dbContext.ShortLinks.Add(shortLink);
 

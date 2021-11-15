@@ -37,7 +37,7 @@ public class GetLinkTests
     public async Task GetLink_WithExistingAlias_Invoke_EventClick(string alias)
     {
         // Assign
-        var fakeData = new[] { new ShortLink("url", alias) }.AsQueryable().BuildMockDbSet();
+        var fakeData = new[] { new ShortLink { Link = "url", Alias = alias } }.AsQueryable().BuildMockDbSet();
         _dbContext.Setup(x => x.ShortLinks).Returns(fakeData.Object);
 
         // Act
