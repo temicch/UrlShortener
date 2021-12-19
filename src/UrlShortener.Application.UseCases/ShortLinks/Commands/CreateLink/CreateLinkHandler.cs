@@ -86,17 +86,17 @@ public class CreateLinkHandler : IRequestHandler<CreateLinkRequest, IResult<Crea
         throw new Exception("Can't create alias");
     }
 
-    private async Task<ShortLink> GetLinkByUrl(string normalizedUrl,
+    private Task<ShortLink> GetLinkByUrl(string normalizedUrl,
         CancellationToken cancellationToken)
     {
-        return await _dbContext.ShortLinks
+        return _dbContext.ShortLinks
             .Where(x => x.Link == normalizedUrl)
             .FirstOrDefaultAsync(cancellationToken);
     }
 
-    private async Task<bool> IsAliasExists(string alias, CancellationToken cancellationToken)
+    private Task<bool> IsAliasExists(string alias, CancellationToken cancellationToken)
     {
-        return await _dbContext.ShortLinks
+        return _dbContext.ShortLinks
             .Where(x => x.Alias == alias)
             .AnyAsync(cancellationToken);
     }

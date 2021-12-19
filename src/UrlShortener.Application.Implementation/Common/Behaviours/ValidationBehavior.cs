@@ -19,7 +19,7 @@ public class ValidationBehavior<TRequest, TResponse> : IPipelineBehavior<TReques
         _validators = validators;
     }
 
-    public async Task<TResponse> Handle(TRequest request,
+    public Task<TResponse> Handle(TRequest request,
         CancellationToken cancellationToken,
         RequestHandlerDelegate<TResponse> next)
     {
@@ -31,6 +31,6 @@ public class ValidationBehavior<TRequest, TResponse> : IPipelineBehavior<TReques
 
         if (failures.Count > 0) throw new ValidationException(failures);
 
-        return await next();
+        return next();
     }
 }
