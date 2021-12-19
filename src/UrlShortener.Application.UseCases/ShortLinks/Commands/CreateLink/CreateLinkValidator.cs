@@ -11,7 +11,7 @@ public class CreateLinkValidator : AbstractValidator<CreateLinkRequest>
         Transform(x => x.EncodedUrl, y => y?.Trim())
             .CorrectUrl(urlShortenerService);
 
-        When(x => !string.IsNullOrEmpty(x.SuggestedAlias?.Trim()), () =>
+        When(x => !string.IsNullOrWhiteSpace(x.SuggestedAlias), () =>
         {
             Transform(x => x.SuggestedAlias, y => y?.Trim())
                 .CorrectAlias();

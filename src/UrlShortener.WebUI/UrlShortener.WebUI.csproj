@@ -13,29 +13,29 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <None Remove="SwaggerHelper.xml" />
+        <None Remove="SwaggerHelper.xml"/>
     </ItemGroup>
     <ItemGroup>
-        <PackageReference Include="AntDesign" Version="0.10.2" />
-        <PackageReference Include="Blazored.FluentValidation" Version="2.0.3" />
-        <PackageReference Include="FluentValidation.AspNetCore" Version="10.3.6" />
-        <PackageReference Include="LigerShark.WebOptimizer.Sass" Version="3.0.58-beta" />
-        <PackageReference Include="MicroElements.Swashbuckle.FluentValidation" Version="5.4.0" />
-        <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.1" />
+        <PackageReference Include="AntDesign" Version="0.10.2"/>
+        <PackageReference Include="Blazored.FluentValidation" Version="2.0.3"/>
+        <PackageReference Include="FluentValidation.AspNetCore" Version="10.3.6"/>
+        <PackageReference Include="LigerShark.WebOptimizer.Sass" Version="3.0.58-beta"/>
+        <PackageReference Include="MicroElements.Swashbuckle.FluentValidation" Version="5.4.0"/>
+        <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.1"/>
         <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.1">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.14.0" />
-        <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.1" />
-        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
+        <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.14.0"/>
+        <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.1"/>
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3"/>
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\UrlShortener.Application.Implementation\UrlShortener.Application.Implementation.csproj" />
-        <ProjectReference Include="..\UrlShortener.Application.Interfaces\UrlShortener.Application.Interfaces.csproj" />
-        <ProjectReference Include="..\UrlShortener.Application.UseCases\UrlShortener.Application.UseCases.csproj" />
-        <ProjectReference Include="..\UrlShortener.Infrastructure\UrlShortener.Infrastructure.csproj" />
+        <ProjectReference Include="..\UrlShortener.Application.Implementation\UrlShortener.Application.Implementation.csproj"/>
+        <ProjectReference Include="..\UrlShortener.Application.Interfaces\UrlShortener.Application.Interfaces.csproj"/>
+        <ProjectReference Include="..\UrlShortener.Application.UseCases\UrlShortener.Application.UseCases.csproj"/>
+        <ProjectReference Include="..\UrlShortener.Infrastructure\UrlShortener.Infrastructure.csproj"/>
     </ItemGroup>
 
 </Project>

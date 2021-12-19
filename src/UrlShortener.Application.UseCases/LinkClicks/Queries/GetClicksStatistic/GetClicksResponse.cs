@@ -1,12 +1,12 @@
-﻿using AutoMapper;
-using System;
+﻿using System;
 using System.Linq;
+using AutoMapper;
 using UrlShortener.Application.Interfaces.Mapping;
 using UrlShortener.Domain.Entities;
 
 namespace UrlShortener.Application.UseCases.LinkClicks.Queries.GetClicksStatistic;
 
-public class GetClicksResponse: IMapFrom<IGrouping<ShortLink, LinkClick>>
+public class GetClicksResponse : IMapFrom<IGrouping<ShortLink, LinkClick>>
 {
     public string LinkId { get; set; }
     public DateTime LinkCreatedAt { get; set; }

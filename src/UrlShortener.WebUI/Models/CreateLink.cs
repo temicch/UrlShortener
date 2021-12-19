@@ -11,6 +11,7 @@ public class CreateLink
     public string Link { get; set; }
     public string SuggestedAlias { get; set; }
     public bool IsAliasUsed { get; set; }
+
     public CreateLinkRequest ToRequest()
     {
         return new CreateLinkRequest(Link, IsAliasUsed ? SuggestedAlias : string.Empty);

@@ -7,5 +7,4 @@ namespace UrlShortener.Application.UseCases.LinkClicks.Queries.GetClicksStatisti
 /// </summary>
 public class GetClicksRequest : PaginatedRequest<GetClicksResponse>
 {
-
 }

@@ -1,13 +1,12 @@
 ﻿using FluentValidation;
 using UrlShortener.Application.Interfaces.Extensions;
 
-namespace UrlShortener.Application.UseCases.LinkClicks.Queries.GetClicksStatistic
+namespace UrlShortener.Application.UseCases.LinkClicks.Queries.GetClicksStatistic;
+
+public class GetClicksValidator : AbstractValidator<GetClicksRequest>
 {
-    public class GetClicksValidator : AbstractValidator<GetClicksRequest>
+    public GetClicksValidator()
     {
-        public GetClicksValidator()
-        {
-            this.RuleForPaginatedRequest<GetClicksRequest, GetClicksResponse>();
-        }
+        this.RuleForPaginatedRequest<GetClicksRequest, GetClicksResponse>();
     }
 }
