@@ -5,11 +5,11 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="9.0.0"/>
+        <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="10.0.1" />
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\UrlShortener.Application.Interfaces\UrlShortener.Application.Interfaces.csproj"/>
+        <ProjectReference Include="..\UrlShortener.Application.Interfaces\UrlShortener.Application.Interfaces.csproj" />
     </ItemGroup>
 
 </Project>

@@ -10,7 +10,8 @@ namespace UrlShortener.Application.Implementation.Common.Behaviours;
 /// <summary>
 ///     Behavior for unhandled <see cref="Exception" />
 /// </summary>
-public class UnhandledExceptionBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
+public class UnhandledExceptionBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse> 
+    where TRequest : IRequest<TResponse>
 {
     private readonly ILogger<TRequest> _logger;
 
