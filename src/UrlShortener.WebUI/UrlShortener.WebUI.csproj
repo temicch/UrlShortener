@@ -18,7 +18,7 @@
     <ItemGroup>
         <PackageReference Include="AntDesign" Version="0.10.6" />
         <PackageReference Include="Blazored.FluentValidation" Version="2.0.3" />
-        <PackageReference Include="FluentValidation.AspNetCore" Version="10.4.0" />
+        <PackageReference Include="FluentValidation.AspNetCore" Version="11.0.1" />
         <PackageReference Include="LigerShark.WebOptimizer.Sass" Version="3.0.84" />
         <PackageReference Include="MicroElements.Swashbuckle.FluentValidation" Version="5.6.0" />
         <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.5" />
