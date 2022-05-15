@@ -19,10 +19,10 @@ public class GetLinksHandler : IPaginatedRequestHandler<GetLinksRequest, GetLink
         _configurationProvider = configurationProvider;
     }
 
-    public async Task<PaginatedList<GetLinksResponse>> Handle(GetLinksRequest request,
+    public Task<PaginatedList<GetLinksResponse>> Handle(GetLinksRequest request,
         CancellationToken cancellationToken)
     {
-        return await _dbContext.ShortLinks
+        return _dbContext.ShortLinks
             .OrderBy(x => x.CreatedAt)
             .ProjectTo<GetLinksResponse>(_configurationProvider)
             .ToPaginatedListAsync(request.PageIndex, request.PageSize, cancellationToken);

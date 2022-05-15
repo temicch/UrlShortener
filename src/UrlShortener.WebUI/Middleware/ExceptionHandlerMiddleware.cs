@@ -52,7 +52,7 @@ public class ExceptionHandlerMiddleware
 
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = (int)code;
-            await context.Response.WriteAsJsonAsync(result);
+            await context.Response.WriteAsJsonAsync(result, context.RequestAborted);
         }
     }
 }

@@ -1,11 +1,11 @@
+using System.Data.Common;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using System.Data.Common;
-using System.Linq;
-using System.Threading.Tasks;
 using UrlShortener.Infrastructure;
 
 namespace UrlShortener.Common.Tests.Common;

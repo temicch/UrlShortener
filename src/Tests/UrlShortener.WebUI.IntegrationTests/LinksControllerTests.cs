@@ -76,7 +76,7 @@ public class LinksControllerTests : IntegrationTestBase
         var dbContextLength = await _dbContext.ShortLinks.CountAsync();
 
         // Act
-        var response = await _controller.GetLinks(new GetLinksRequest()
+        var response = await _controller.GetLinks(new GetLinksRequest
         {
             PageIndex = 0,
             PageSize = linksCount
